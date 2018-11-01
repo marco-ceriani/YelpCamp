@@ -1,26 +1,34 @@
 
-var express = require('express'),
-	bodyParser = require('body-parser')
-var app = express()
+var express    = require('express'),
+	app        = express(),
+	bodyParser = require('body-parser'),
+	mongoose   = require('mongoose')
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended : true}))
 
-//1208201.png  13208593975.png  18103628621.png  1851092.png  1867275.png  3820664827.png
+mongoose.connect('mongodb://localhost/yelp_camp', { useNewUrlParser: true })
 
-campgrounds = [
-	{name: 'Salmon Creek', image: '/photos/1208201.png'},
-	{name: 'Tuna Creek', image: '/photos/13208593975.png'},
-	{name: 'Seabass Creek', image: '/photos/18103628621.png'}
-]
+// SCHEMA SETUP
+var campgroundSchema = new mongoose.Schema({
+	name: String,
+	image: String
+})
+var Campground = mongoose.model('Campground', campgroundSchema)
 
 app.get('/', function(req, res){
 	res.render('landing')
 })
 
 app.get('/campgrounds', function(req, res) {
-	res.render('campgrounds', {campgrounds : campgrounds})
+	Campground.find({}, function(err, allCampgrounds) {
+		if (err) {
+			console.log(err)
+		} else {
+			res.render('campgrounds', {campgrounds : allCampgrounds})
+		}
+	})
 })
 
 app.post('/campgrounds', function(req, res) {
@@ -28,8 +36,14 @@ app.post('/campgrounds', function(req, res) {
 		name: req.body.name,
 		image: req.body.image
 	}
-	campgrounds.push(newCampground)
-	res.redirect('/campgrounds')
+	Campground.create(newCampground, function(err, camp) {
+		if (err) {
+			console.log(err)
+		} else {
+			res.redirect('/campgrounds')
+		}
+	})
+	
 })
 
 app.get('/campgrounds/new', function(req, res) {
