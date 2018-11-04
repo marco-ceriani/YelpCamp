@@ -6,7 +6,7 @@ var express    = require('express'),
     router     = express.Router(),
     Campground = require('../models/campground')
 
-// INDEX
+// INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
     Campground.find({}, function(err, allCampgrounds) {
         if (err) {
@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
     })
 })
 
-// CREATE
+// CREATE CAMPGROUND
 router.post('/', isLoggedIn, function(req, res) {
     var author = {
             id: req.user._id,
@@ -38,12 +38,12 @@ router.post('/', isLoggedIn, function(req, res) {
     })
 })
 
-// NEW
+// NEW CAMPGROUND
 router.get('/new', isLoggedIn, function(req, res) {
     res.render('campgrounds/new')
 })
 
-// SHOW
+// SHOW CAMPGROUND
 router.get('/:id', function(req, res) {
     let id = req.params.id
     Campground
@@ -56,6 +56,42 @@ router.get('/:id', function(req, res) {
                 res.render('campgrounds/show', {campground: camp})
             }
         })
+})
+
+// EDIT CAMPGROUND
+router.get('/:id/edit', function(req, res) {
+    Campground.findById(req.params.id, function(err, campground) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.render('campgrounds/edit', {campground: campground})
+        }
+    })
+    
+})
+
+// UDPATE CAMPGROUND
+router.put('/:id', function(req, res) {
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, camp) {
+        if (err) {
+            console.log(err)
+            res.redirect('/campgrounds')
+        } else {
+            res.redirect('/campgrounds/' + req.params.id)
+        }
+    })
+})
+
+// DESTROY CAMPGROUND
+router.delete('/:id', function(req, res) {
+    Campground.findByIdAndRemove(req.params.id, function(err) {
+        if (err) {
+            console.log(err)
+            res.redirect('/campgrounds')
+        } else {
+            res.redirect('/campgrounds')
+        }
+    })
 })
 
 function isLoggedIn(req, res, next) {
