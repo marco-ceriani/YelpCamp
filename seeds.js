@@ -45,7 +45,7 @@ function seedDB() {
         } else {
             console.log('Removed all campgrounds')
             // Seed the campgrounds
-            data.forEach(function(camp) {
+            /*data.forEach(function(camp) {
                 Campground.create(camp, function(err, campground) {
                     if (err) {
                         console.log(err)
@@ -67,7 +67,7 @@ function seedDB() {
                         })
                     }
                 })
-            })
+            })*/
         }
     })
 
