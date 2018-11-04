@@ -18,11 +18,16 @@ router.get('/', function(req, res) {
 })
 
 // CREATE
-router.post('/', function(req, res) {
+router.post('/', isLoggedIn, function(req, res) {
+    var author = {
+            id: req.user._id,
+            username: req.user.username
+        }
     var newCampground = {
         name: req.body.name,
         image: req.body.image,
-        description: req.body.description
+        description: req.body.description,
+        author: author
     }
     Campground.create(newCampground, function(err, camp) {
         if (err) {
@@ -34,7 +39,7 @@ router.post('/', function(req, res) {
 })
 
 // NEW
-router.get('/new', function(req, res) {
+router.get('/new', isLoggedIn, function(req, res) {
     res.render('campgrounds/new')
 })
 
@@ -52,5 +57,13 @@ router.get('/:id', function(req, res) {
             }
         })
 })
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    } else {
+        res.redirect('/login')
+    }
+}
 
 module.exports = router
