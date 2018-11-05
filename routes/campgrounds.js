@@ -59,19 +59,15 @@ router.get('/:id', function(req, res) {
 })
 
 // EDIT CAMPGROUND
-router.get('/:id/edit', function(req, res) {
+router.get('/:id/edit', checkCampgroundAuthor, function(req, res) {
     Campground.findById(req.params.id, function(err, campground) {
-        if (err) {
-            console.log(err)
-        } else {
-            res.render('campgrounds/edit', {campground: campground})
-        }
+       res.render('campgrounds/edit', {campground: campground})
+       // err ? there could be a critical race with a destroy. do we care?
     })
-    
 })
 
 // UDPATE CAMPGROUND
-router.put('/:id', function(req, res) {
+router.put('/:id', checkCampgroundAuthor, function(req, res) {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, camp) {
         if (err) {
             console.log(err)
@@ -83,7 +79,7 @@ router.put('/:id', function(req, res) {
 })
 
 // DESTROY CAMPGROUND
-router.delete('/:id', function(req, res) {
+router.delete('/:id', checkCampgroundAuthor, function(req, res) {
     Campground.findByIdAndRemove(req.params.id, function(err) {
         if (err) {
             console.log(err)
@@ -100,6 +96,25 @@ function isLoggedIn(req, res, next) {
     } else {
         res.redirect('/login')
     }
+}
+
+function checkCampgroundAuthor(req, res, next) {
+    if (req.isAuthenticated()) {
+        Campground.findById(req.params.id, function(err, campground) {
+            if (err) {
+                res.redirect('back')
+            } else {
+                // author.id is an object not a string
+                if (campground.author.id.equals(req.user._id)) {
+                    return next()
+                } else {
+                    res.redirect('back')
+                }
+            }
+        })
+    } else {
+        res.redirect('back')
+    }   
 }
 
 module.exports = router
