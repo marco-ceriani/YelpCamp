@@ -62,8 +62,12 @@ router.get('/:id', function(req, res) {
 // EDIT CAMPGROUND
 router.get('/:id/edit', middleware.checkCampgroundAuthor, function(req, res) {
     Campground.findById(req.params.id, function(err, campground) {
-       res.render('campgrounds/edit', {campground: campground})
-       // err ? there could be a critical race with a destroy. do we care?
+        if (err) {
+            res.flash('Campground not found')
+        } else {
+            res.render('campgrounds/edit', {campground: campground})
+            // err ? there could be a critical race with a destroy. do we care?
+        }
     })
 })
 
