@@ -17,8 +17,12 @@ var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes    = require('./routes/comments'),
 	indexRoutes      = require('./routes/index')
 
+mongouser = 'TheAdmin'
+mongopassword = '3pcQr3vMYPKN'
+mongourl = 'mongodb://' + mongouser + ':' + mongopassword + '@ds241012.mlab.com:41012/yelp_camp'
+//mongourl = 'mongodb://localhost/yelp_camp'
 mongoose.set('useFindAndModify', false);
-mongoose.connect('mongodb://localhost/yelp_camp', { useNewUrlParser: true })
+mongoose.connect(mongourl, { useNewUrlParser: true })
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({extended : true}))
