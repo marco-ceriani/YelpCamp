@@ -54,7 +54,8 @@ if (args.indexOf('--reset') >= 0) {
 	seedDB()	
 }
 
-app.listen('3000', 'localhost', function() {
-	console.log('YelpCamp started at port 3000')
+var port = process.env.PORT || 8080
+app.listen(port, process.env.IP, function() {
+	console.log('YelpCamp started at port ' + port)
 })
 
