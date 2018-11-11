@@ -12,17 +12,15 @@ var express        = require('express'),
 	User           = require('./models/user'),
 	seedDB         = require('./seeds')
 
+require('dotenv').config()
+
 // requiring routes
 var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes    = require('./routes/comments'),
 	indexRoutes      = require('./routes/index')
 
-mongouser = 'TheAdmin'
-mongopassword = '3pcQr3vMYPKN'
-mongourl = 'mongodb://' + mongouser + ':' + mongopassword + '@ds241012.mlab.com:41012/yelp_camp'
-//mongourl = 'mongodb://localhost/yelp_camp'
 mongoose.set('useFindAndModify', false);
-mongoose.connect(mongourl, { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({extended : true}))
