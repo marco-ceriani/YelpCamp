@@ -12,7 +12,7 @@ router.get('/', function(req, res){
 // Authentication routes
 
 router.get('/register', function(req, res) {
-    res.render('register')
+    res.render('register', {page: 'register'})
 })
 
 router.post('/register', function(req, res){
@@ -25,13 +25,13 @@ router.post('/register', function(req, res){
         }
         passport.authenticate('local')(req, res, function() {
             req.flash("success", "Welcome to YelpCamp " + user.username)
-            res.redirect('campgrounds')
+            res.redirect('/campgrounds')
         })
     })
 })
 
 router.get('/login', function(req, res) {
-    res.render('login')
+    res.render('login', {page:'login'})
 })
 
 // Log In
