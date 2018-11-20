@@ -1,8 +1,13 @@
 var mongoose  = require("mongoose");
 var Campground = require("./models/campground");
 var Comment    = require("./models/comment");
+var User       = require("./models/user");
 
-
+var users = [
+    {name: "pippo", password: "pippo"},
+    {name: "marco", password: "polo"},
+    {name: "mickey", password: "mouse"}
+]
 
 var data = [
     {
@@ -37,7 +42,37 @@ var data = [
     }
 ]
 
+function seedUsers(next) {
+    User.remove({}, function(err) {
+        if (err) {
+            console.log('error removing users: ' + err)
+        } else {
+            console.log('removed all users')
+            count = 0
+            users.forEach(function(user) {
+                var newUser = new User({username: user.name})
+                User.register(newUser, user.password, function(err, createdUser) {
+                    if (err) {
+                        console.log('error creating user ' + user.name + ' : ' + err)
+                    } else {
+                        console.log('created user ' + createdUser.username)
+                        user.id = createdUser._id
+                        count++
+                        if (count == users.length) {
+                            next()
+                        }
+                    }
+                })
+            })
+        }
+    })
+}
+
 function seedDB() {
+    seedUsers(function() {
+        console.log(users)
+    })
+/*
     // Remove all campgrounds
     Campground.remove({}, function(err) {
         if (err) {
@@ -45,7 +80,7 @@ function seedDB() {
         } else {
             console.log('Removed all campgrounds')
             // Seed the campgrounds
-            /*data.forEach(function(camp) {
+            data.forEach(function(camp) {
                 Campground.create(camp, function(err, campground) {
                     if (err) {
                         console.log(err)
@@ -67,9 +102,10 @@ function seedDB() {
                         })
                     }
                 })
-            })*/
+            })
         }
     })
+    */
 
 }
 
