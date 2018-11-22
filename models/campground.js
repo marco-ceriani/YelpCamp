@@ -1,25 +1,26 @@
-var mongoose   = require('mongoose'),
-	Comment    = require('./comment')
+var mongoose = require('mongoose'),
+    Comment = require('./comment')
 
 // SCHEMA SETUP
 var campgroundSchema = new mongoose.Schema({
-	name: String,
-	image: String,
-	description: String,
-  price: String,
-  author: {
-      id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User"
-      },
-      username: String
-  },
-	comments: [
-		{
-         	type: mongoose.Schema.Types.ObjectId,
-         	ref: "Comment"
-      	}
-	]
+    name: String,
+    image: String,
+    description: String,
+    price: String,
+    createdAt: { type: Date, default: Date.now },
+    author: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+        username: String
+    },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment"
+        }
+    ]
 })
 var Campground = mongoose.model('Campground', campgroundSchema)
 
