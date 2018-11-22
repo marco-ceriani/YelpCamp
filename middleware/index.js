@@ -23,7 +23,7 @@ middlewareObj.checkCommentAuthor = function(req, res, next) {
                 req.flash("error", "Comment not found")
                 res.redirect('back')
             } else {
-                if (foundComment.author.id.equals(req.user._id)) {
+                if (foundComment.author.id.equals(req.user._id) || req.user.role === 'ADMIN') {
                     return next()
                 } else {
                     req.flash("error", "You don't have the required permission")
@@ -48,7 +48,7 @@ middlewareObj.checkCampgroundAuthor = function(req, res, next) {
                 res.redirect('back')
             } else {
                 // author.id is an object not a string
-                if (campground.author.id.equals(req.user._id)) {
+                if (campground.author.id.equals(req.user._id) || req.user.role === 'ADMIN') {
                     return next()
                 } else {
                     req.flash("error", "You don't have the required permission")
