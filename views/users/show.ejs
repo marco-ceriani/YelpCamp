@@ -1,0 +1,24 @@
+<% include ../partials/header %>
+
+<div class="row justify-content-center">
+    <div class="col-sm-3">
+        <img src="<%=user.avatar%>" alt="user profile image" class="img-thumbnail rounded-circle">
+    </div>
+    <div class="col-sm-6">
+        <h1><%=user.fullName%></h1>
+        <span class="font-italic">@<%=user.username%></span>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci commodi quasi ipsum. Molestias, minus perferendis. Nostrum illum quidem ipsa natus dolorem itaque alias facilis dignissimos in. Harum non modi quam.</p>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="card col-sm-9">
+        <h3 class="card-title">Submitted Campgrounds</h3>
+        <ul class="list-group list-group-flush">
+            <%campgrounds.forEach(function(campground) {%>
+                <li class="list-group-item"><a href="/campgrounds/<%=campground.id%>"><%=campground.name%></a></li>
+            <%})%>
+        </ul>
+    </div>
+</div>
+
+<% include ../partials/footer %>
