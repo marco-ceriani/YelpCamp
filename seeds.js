@@ -61,9 +61,13 @@ var commentSeeds = [
 
 async function seedDB() {
 
+    console.log('deleting users')
     await User.deleteMany({})
+    console.log('creating users')
     let users = await Promise.all(userSeeds.map(async user => {
         let newUser = new User(user)
+        //let password = user.password
+        delete newUser.password
         return User.register(newUser, user.password)
     }))
     users.shift()
@@ -71,9 +75,11 @@ async function seedDB() {
         return users[Math.floor(Math.random() * users.length)]
     }
     
+    console.log('deleting data')
     await Campground.deleteMany({})
     await Comment.deleteMany({})
 
+    console.log('creating test data')
     for (const seed of campSeeds) {
         let author = randomUser()
         const newCampgroundData = {
