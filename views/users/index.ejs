@@ -1,0 +1,52 @@
+<% include ../partials/header %>
+
+<div class="row text-center mb-3">
+    <div class="col-lg-12">
+        <h3>Registered users</h3>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Role</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%users.forEach(function(user) {%>
+        <tr class=<%=user.role=='ADMIN' ? "table-primary" : "" %>>
+            <% if (user.disabled) {
+                    icon="fa-user-alt-slash" 
+                } else if (user.isAdmin()) {
+                    icon="fa-user-cog"
+                } else {
+                    icon="fa-user-alt"
+                }
+            %>
+            <td scope="row">
+                <i class="fas <%=icon%> mr-2"></i><%=user.username%>
+            </td>
+            <td>
+                <%=user.fullName%>
+            </td>
+            <td>
+                <%=user.role%>
+            </td>
+            <td>
+                <form class="delete-form" action="/users/<%=user.id%>/status?_method=PATCH" method="POST">
+                    <input type="hidden" name="disable" value="<%=!user.disabled%>">
+                    <button class="btn btn-warning btn-sm"><i class="fas fa-lock"></i></button>
+                </form>
+                <form class="delete-form" action="/users/<%=user.id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                </form>
+            </td>
+        </tr>
+        <%}) %>
+    </tbody>
+</table>
+
+<% include ../partials/footer %>

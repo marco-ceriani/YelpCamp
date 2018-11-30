@@ -17,7 +17,8 @@ require('dotenv').config()
 // requiring routes
 var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes    = require('./routes/comments'),
-	indexRoutes      = require('./routes/index')
+	indexRoutes      = require('./routes/index'),
+	userRoutes       = require('./routes/users')
 
 mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
@@ -50,6 +51,7 @@ app.use(function(req, res, next) {
 app.use(indexRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
+app.use('/users', userRoutes)
 
 
 var args = process.argv.slice(2)
