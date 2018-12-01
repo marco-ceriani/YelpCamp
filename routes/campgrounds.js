@@ -5,6 +5,7 @@
 var express    = require('express'),
     router     = express.Router(),
     Campground = require('../models/campground'),
+    Comment    = require('../models/comment'),
     middleware = require('../middleware')
 
 // INDEX CAMPGROUNDS
@@ -86,13 +87,15 @@ router.put('/:id', middleware.checkCampgroundAuthor, function(req, res) {
 
 // DESTROY CAMPGROUND
 router.delete('/:id', middleware.checkCampgroundAuthor, function(req, res) {
-    Campground.findByIdAndRemove(req.params.id, function(err) {
-        if (err) {
-            console.log(err)
+    Campground.findByIdAndRemove(req.params.id, function(err, campground) {
+        Comment.deleteMany({
+            _id:{ 
+                $in: campground.comments 
+            }
+        }, function(err, comments) {
+            req.flash(err ? 'error' : 'success', campground.name + ' deleted')
             res.redirect('/campgrounds')
-        } else {
-            res.redirect('/campgrounds')
-        }
+        })
     })
 })
 
