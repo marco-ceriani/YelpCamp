@@ -6,7 +6,8 @@ var express    = require('express'),
     router     = express.Router(),
     Campground = require('../models/campground'),
     Comment    = require('../models/comment'),
-    middleware = require('../middleware')
+    middleware = require('../middleware'),
+    geolocator = require('../api/geolocation')('openstreetmap')
 
 // INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
@@ -43,7 +44,8 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
         price: req.body.price,
         image: req.body.image,
         description: req.body.description,
-        author: author
+        author: author,
+        location: req.body.location
     }
     Campground.create(newCampground, function(err, camp) {
         if (err) {
@@ -69,6 +71,12 @@ router.get('/:id', function(req, res) {
             if (err) {
                 console.log(err)
             } else {
+                if (camp.location && camp.location.geo) {
+                    lon = camp.location.geo.coordinates[0]
+                    lat = camp.location.geo.coordinates[1]                    
+                    camp.maplink = geolocator.getMapLink(lat, lon)
+                    camp.mapurl = geolocator.getMapUrl(lat, lon)
+                }
                 res.render('campgrounds/show', {campground: camp})
             }
         })
@@ -87,8 +95,22 @@ router.get('/:id/edit', middleware.checkCampgroundAuthor, function(req, res) {
 })
 
 // UDPATE CAMPGROUND
-router.put('/:id', middleware.checkCampgroundAuthor, function(req, res) {
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, camp) {
+router.put('/:id', middleware.checkCampgroundAuthor, async function(req, res) {
+    let camp = req.body.campground
+    const location = camp.location.textual
+    console.log(location)
+    if (location) {
+        let results = await geolocator.search(location)
+        console.log(results)
+        if (results && results.length > 0) {
+            camp.location.geo = {
+                type: 'Point',
+                coordinates: [ results[0].longitude, results[0].latitude ]
+            }
+        }
+        console.log(camp)
+    }
+    Campground.findByIdAndUpdate(req.params.id, camp, function(err, camp) {
         if (err) {
             console.log(err)
             res.redirect('/campgrounds')
