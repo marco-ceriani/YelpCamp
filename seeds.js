@@ -15,7 +15,14 @@ var campSeeds = [
         name: "Cloud's Rest", 
         image: "/photos/13208593975.png",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-        price: '9.99'
+        price: '9.99',
+        location : {
+            textual : "Monte Bianco",
+            geo : {
+                type : "Point",
+                coordinates : [ 6.8651661, 45.8326753 ] 
+            } 
+        }
     },
     {
         name: "Desert Mesa", 
@@ -39,7 +46,14 @@ var campSeeds = [
         name: "Sunny Side", 
         image: "/photos/1851092.png",
         description: "A sunny campground with a breath breaking landscape",
-        price: '1.99'
+        price: '1.99',
+        location : {
+            textual : "Milano",
+            geo : {
+                type : "Point",
+                coordinates : [ 9.1885548, 45.4641385 ] 
+            }
+        }
     },
     {
         name: "Hell's Camp", 
