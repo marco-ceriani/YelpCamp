@@ -4,6 +4,7 @@ var express        = require('express'),
 	bodyParser     = require('body-parser'),
 	mongoose       = require('mongoose'),
 	flash          = require('connect-flash'),
+	favicon		   = require('serve-favicon'),
 	passport       = require('passport'),
 	LocalStrategy  = require('passport-local'),
 	methodOverride = require('method-override'),
@@ -23,6 +24,7 @@ var campgroundRoutes = require('./routes/campgrounds'),
 mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 app.set('view engine', 'ejs')
+app.use(favicon(__dirname + '/public/camping-tent.png'))
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({extended : true}))
 app.use(methodOverride('_method'))
