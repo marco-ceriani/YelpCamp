@@ -10,11 +10,24 @@ var express    = require('express'),
 
 // INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
-    Campground.find({}, function(err, allCampgrounds) {
+    var filter = {}
+    if (req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi')
+        filter = { name: regex}
+    }
+    Campground.find(filter, function(err, foundCampgrounds) {
         if (err) {
             console.log(err)
         } else {
-            res.render('campgrounds/index', {campgrounds : allCampgrounds, page: 'campgrounds'})
+            var queryMessage = null;
+            if (foundCampgrounds.length < 1) {
+                queryMessage = "No campgrounds match the query provided"
+            }
+            res.render('campgrounds/index', {
+                campgrounds : foundCampgrounds,
+                page: 'campgrounds',
+                queryMessage : queryMessage
+            })
         }
     })
 })
@@ -98,5 +111,10 @@ router.delete('/:id', middleware.checkCampgroundAuthor, function(req, res) {
         })
     })
 })
+
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router
