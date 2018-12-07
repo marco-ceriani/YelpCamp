@@ -32,7 +32,16 @@ OpenStreetMapLocator.prototype.search = function(location, maxResults) {
     })
 }
 
-module.exports = function(provider, options) {
+OpenStreetMapLocator.prototype.reverse = function(lat, lon, zoom=0) {
+    return this.geocoder.reverse({
+        lat: lat,
+        lon: lon,
+        zoom: zoom
+    })
+}
+
+module.exports = function(options = {}) {
+    let provider = options.provider || 'openstreetmap'
     if (provider !== 'openstreetmap') {
         throw "Invalid provider"
     }
