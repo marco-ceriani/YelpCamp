@@ -22,8 +22,4 @@ UserSchema.methods.isAdmin = function() {
 UserSchema.plugin(passportLocalMongoose)
 User = mongoose.model('User', UserSchema)
 
-if (User.estimatedDocumentCount() == 0) {
-    User.register({username: 'admin', role: 'ADMIN'}, 'istrator')
-}
-
 module.exports = User
