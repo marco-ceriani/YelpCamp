@@ -7,7 +7,7 @@ var express    = require('express'),
     Campground = require('../models/campground'),
     Comment    = require('../models/comment'),
     middleware = require('../middleware'),
-    geolocator = require('../api/geolocation')('openstreetmap')
+    geolocator = require('../api/geolocation')()
 
 // INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
@@ -70,14 +70,17 @@ router.get('/:id', function(req, res) {
         .exec(function(err, camp) {
             if (err) {
                 console.log(err)
-            } else {
+            } else if (camp) {
                 if (camp.location && camp.location.geo) {
                     lon = camp.location.geo.coordinates[0]
                     lat = camp.location.geo.coordinates[1]                    
                     camp.maplink = geolocator.getMapLink(lat, lon)
-                    camp.mapurl = geolocator.getMapUrl(lat, lon)
+                    camp.mapurl = geolocator.getMapUrl(lat, lon, 0.05)
                 }
                 res.render('campgrounds/show', {campground: camp})
+            } else {
+                req.flash("error", 'campground not found')
+                res.redirect('/campgrounds')
             }
         })
 })

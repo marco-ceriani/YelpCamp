@@ -57,9 +57,17 @@ app.use('/users', userRoutes)
 
 
 var args = process.argv.slice(2)
+var initPromise;
 if (args.indexOf('--reset') >= 0) {
-	seedDB()	
+	initPromise = seedDB.clearDB()
+} else {
+	initPromise = Promise.resolve()
 }
+initPromise.then(function() {
+	if (process.env !== 'production') {
+		seedDB.createData()
+	}
+})
 
 var port = process.env.PORT || 8080
 app.listen(port, process.env.IP, function() {
