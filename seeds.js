@@ -132,7 +132,10 @@ async function randomLocation() {
     let coordinates = null
     let result = null
     for (let i = 0; i < 5; i++) {
-        coordinates = [faker.address.longitude(), faker.address.latitude()]
+        coordinates = [
+            Number(faker.address.longitude()),
+            Number(faker.address.latitude())
+        ]
         try {
             result = await geolocation.reverse(coordinates[1], coordinates[0], zoom=12)
             break
