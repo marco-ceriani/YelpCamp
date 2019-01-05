@@ -7,7 +7,7 @@ var express    = require('express'),
     Campground = require('../models/campground'),
     Comment    = require('../models/comment'),
     middleware = require('../middleware'),
-    geolocator = require('../api/geolocation')()
+    geolocator = require('../lib/geolocation')()
 
 // INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
