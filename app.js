@@ -66,6 +66,8 @@ app.use(function (req, res, next) {
 	next()
 })
 
+require('./lib/logs')
+
 // importing and setting routes up
 var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes = require('./routes/comments'),

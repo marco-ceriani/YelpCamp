@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var faker = require("faker");
-var geolocation = require("./api/geolocation")();
+var geolocation = require("./lib/geolocation")();
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var User = require("./models/user");
