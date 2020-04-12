@@ -28,7 +28,7 @@ mongoose.connect(process.env.DATABASE_URL, {
 })
 // Init Express
 app.set('view engine', 'ejs')
-app.use(favicon(__dirname + '/public/camping-tent.png'))
+//app.use(favicon(__dirname + '/public/camping-tent.png'))
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
