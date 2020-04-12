@@ -73,12 +73,14 @@ require('./lib/logs')
 var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes = require('./routes/comments'),
 	indexRoutes = require('./routes/index'),
-	userRoutes = require('./routes/users')
+	userRoutes = require('./routes/users'),
+	restRoutes = require('./routes/rest')
 
 app.use(indexRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
 app.use('/users', userRoutes)
+app.use('/rest', restRoutes)
 
 // New React client
 app.get('/v2', (req, res) => {

@@ -1,26 +1,25 @@
 import React from 'react';
+import { Switch, Route, withRouter } from 'react-router-dom';
+
 import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+
+import Toolbar from './components/Navigation/Toolbar/Toolbar';
+import LandingPage from './components/LandingPage/LandingPage';
+import Campgrounds from './containers/Campgrounds/Campgrounds';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Toolbar />
+      <Switch>
+        <Route path="/campgrounds" component={Campgrounds} />
+        <Route path="/" exact component={LandingPage} />
+        <Route><div style={{textAlign: 'center', fontSize: '4rem', paddingTop: '30vh'}}>Page Not found</div></Route>
+      </Switch>
+    </>
   );
 }
 
-export default App;
+export default withRouter(App);
