@@ -15,7 +15,8 @@ var express = require('express'),
 	Campground = require('./models/campground'),
 	Comment = require('./models/comment'),
 	User = require('./models/user'),
-	seedDB = require('./seeds')
+	seedDB = require('./seeds'),
+	path = require('path')
 
 require('dotenv').config()
 
@@ -79,6 +80,11 @@ app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
 app.use('/users', userRoutes)
 
+// New React client
+app.get('/v2', (req, res) => {
+	res.sendfile(path.join(__dirname, 'client', 'build', 'index.html'))
+})
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 var args = process.argv.slice(2)
 var initPromise;
