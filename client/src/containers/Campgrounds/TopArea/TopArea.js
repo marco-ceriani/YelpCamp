@@ -9,16 +9,17 @@ import Form from 'react-bootstrap/Form';
 const TopArea = (props) => {
 
     const [search, setSearch] = useState('');
+    const {queryChanged} = props;
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            props.queryChanged(search)
+            queryChanged(search)
         }, 500);
         
         return () => {
             clearTimeout(timer)
         }
-    }, [search]);
+    }, [search, queryChanged]);
 
     return (
             <Jumbotron>

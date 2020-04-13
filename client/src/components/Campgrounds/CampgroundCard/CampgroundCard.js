@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinkContainer } from 'react-router-bootstrap'
 
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -14,7 +15,9 @@ const CampgroundCard = props => {
                 <img src={props.image} className={imgClasses.join(" ")} alt={props.name} />
             </div>
             <h4>{props.name}</h4>
-            <Button variant="primary">More Info</Button>
+            <LinkContainer to={"/campgrounds/" + props.id}>
+                <Button variant="primary">More Info</Button>
+            </LinkContainer>
 
         </Col>
     );

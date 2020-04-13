@@ -8,13 +8,15 @@ import './App.css';
 import Toolbar from './components/Navigation/Toolbar/Toolbar';
 import LandingPage from './components/LandingPage/LandingPage';
 import Campgrounds from './containers/Campgrounds/Campgrounds';
+import Campground from './containers/Campground/Campground';
 
 function App() {
   return (
     <>
       <Toolbar />
       <Switch>
-        <Route path="/campgrounds" component={Campgrounds} />
+        <Route path="/campgrounds" exact component={Campgrounds} />
+        <Route path="/campgrounds/:id" exact component={Campground} />
         <Route path="/" exact component={LandingPage} />
         <Route><div style={{textAlign: 'center', fontSize: '4rem', paddingTop: '30vh'}}>Page Not found</div></Route>
       </Switch>
