@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import TopArea from './TopArea/TopArea';
-import CampgroundCard from './CampgroundCard/CampgroundCard';
+import CampgroundCard from '../../components/Campgrounds/CampgroundCard/CampgroundCard';
 
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row';
 const campgroundCard = camp => (
     <CampgroundCard
         key={camp.id}
+        id={camp.id}
         name={camp.name}
         image={camp.image}
     />

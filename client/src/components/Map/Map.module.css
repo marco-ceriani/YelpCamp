@@ -1,0 +1,12 @@
+
+.MapContainer {
+	margin-top: .5rem;
+	border: 1px solid #dee2e6 !important
+}
+
+.MapEmpty {
+	padding: 20% 0;
+	background-color: #ede8dd;
+	font-size: 7rem;
+	color: #505050;
+}
