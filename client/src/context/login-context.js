@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
 export const LoginContext = React.createContext({
     userId: '',
@@ -15,10 +16,22 @@ const LoginContextProvider = (props) => {
     const loginHandler = (id, name, avatar) => {
         setUser({ id, name, avatar });
     }
-    
-    const logoutHandler = () => {
-        setUser(null);
-    }
+
+    const logoutHandler = useCallback(() => {
+        axios.get('/rest/auth/logout')
+            .then(setUser(null));
+    }, []);
+
+    useEffect(() => {
+        axios.get('/rest/auth/check')
+            .then(resp => {
+                const { id, fullname, avatar } = resp.data;
+                loginHandler(id, fullname, avatar);
+            })
+            .catch(err => {
+                // ignore it
+            })
+    }, []);
 
     return (
         <LoginContext.Provider value={{
