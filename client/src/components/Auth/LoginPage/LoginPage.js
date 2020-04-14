@@ -1,7 +1,7 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState } from 'react';
 import axios from 'axios';
 
-import {Container, Form, Button} from 'react-bootstrap';
+import { Container, Form, Button, Col, Alert } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
 import { LoginContext } from '../../../context/login-context';
@@ -11,26 +11,32 @@ const LoginPage = props => {
     const refUsername = useRef(null);
     const refPassword = useRef(null);
     const loginContext = useContext(LoginContext);
+    const [error, setError] = useState(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         axios.post('/rest/auth/login', {
             username: refUsername.current.value,
             password: refPassword.current.value
-        })
-        .then(resp => {
-            const {id, fullname} = resp.data;
+        }).then(resp => {
+            const { id, fullname } = resp.data;
             loginContext.login(id, fullname);
+        }).catch(err => {
+            setError(err.message);
         })
     }
 
     const redirGuard = loginContext.userId && <Redirect to="/campgrounds" />
+    const errorBanner = error && (
+        <Alert variant="danger">The username or password is invalid</Alert>
+    );
 
     return (
         <Container>
             {redirGuard}
-            <h1 className="text-center">Login</h1>
-            <div className="mt-4 w-50 mx-auto">
+            <Col sm="9" lg="6" className="mx-auto">
+                <h1 className="text-center mb-4">Login</h1>
+                {errorBanner}
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="username">
                         <Form.Label srOnly>Username</Form.Label>
@@ -42,7 +48,7 @@ const LoginPage = props => {
                     </Form.Group>
                     <Button variant="primary" type="submit">Login</Button>
                 </Form>
-            </div>
+            </Col>
         </Container>
     )
 }

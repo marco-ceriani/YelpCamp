@@ -21,7 +21,7 @@ function App() {
         <Route path="/campgrounds" exact component={Campgrounds} />
         <Route path="/campgrounds/:id" exact component={Campground} />
         <Route path="/login" component={LoginPage} />
-        {/*<Route path="/register" component={SignUpPage} />*/} 
+        <Route path="/register" component={SignUpPage} />
         <Route path="/logout" component={LogoutPage} />
         <Route path="/" exact component={LandingPage} />
         <Route><div style={{textAlign: 'center', fontSize: '4rem', paddingTop: '30vh'}}>Page Not found</div></Route>

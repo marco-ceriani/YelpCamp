@@ -9,7 +9,7 @@ router.use('/auth', authRoutes);
 router.use('/campgrounds', campgroundRoutes);
 
 const logErrors = (err, req, res, next) => {
-    console.error('Rqeuest error ' + err.stack);
+    console.error('Request error ' + err.stack);
     next(err);
 }
 
