@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+import { Navbar, Nav } from 'react-bootstrap';
 import NavbarLink from '../NavbarLink/NavbarLink';
 
 import { LoginContext } from '../../../context/login-context';
+import UserButton from '../UserButton/UserButton';
 
 const Toolbar = props => {
 
@@ -17,19 +17,9 @@ const Toolbar = props => {
     if (authContext && authContext.userId) {
         rightMenuItems = [
             <NavbarLink to="/profile" key="profile">
-                <>
-                    <img src={authContext.avatar} alt="avatar" style={{
-                        width: '2.5rem',
-                        height: '2.5rem',
-                        marginRight: '0.5rem',
-                        marginTop: '-0.7rem',
-                        marginBottom: '-0.7rem',
-                        borderRadius: '50%'
-                    }}></img>
-                    {authContext.name}
-                </>
+                <UserButton name={authContext.name} avatar={authContext.avatar}/>
             </NavbarLink >,
-            <NavbarLink to="/logout" key="logout">Logout</NavbarLink>
+            <NavbarLink to="/logout" key="logout">Logout</NavbarLink>,
         ];
     }
 

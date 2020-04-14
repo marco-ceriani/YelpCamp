@@ -11,21 +11,19 @@ const LogoutPage = (props) => {
     const { userId, logout } = useContext(LoginContext);
 
     useEffect(() => {
-        axios.get('/rest/auth/logout')
-        .then(logout());
+        logout();
     }, [logout]);
 
-    let content = (
+    if (!userId) {
+        return <Redirect to="/campgrounds" />
+    }
+
+    return (
         <div className={classes.LogoutBox} >
             <h3>Logging out ...</h3>
             <Spinner animation="border" variant="primary" className={classes.Spinner} />
         </div>
     )
-    if (!userId) {
-        content = <Redirect to="/campgrounds" />
-    }
-
-    return content;
 }
 
 export default LogoutPage;
