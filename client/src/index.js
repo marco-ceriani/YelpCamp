@@ -5,10 +5,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import LoginContextProvider from './context/login-context';
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter basename="/v2">
-      <App />
+      <LoginContextProvider>
+        <App />
+      </LoginContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
