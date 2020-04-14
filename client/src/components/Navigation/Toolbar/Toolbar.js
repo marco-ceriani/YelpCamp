@@ -16,7 +16,19 @@ const Toolbar = props => {
     ];
     if (authContext && authContext.userId) {
         rightMenuItems = [
-            <NavbarLink to="/profile" key="profile">{authContext.name}</NavbarLink>,
+            <NavbarLink to="/profile" key="profile">
+                <>
+                    <img src={authContext.avatar} alt="avatar" style={{
+                        width: '2.5rem',
+                        height: '2.5rem',
+                        marginRight: '0.5rem',
+                        marginTop: '-0.7rem',
+                        marginBottom: '-0.7rem',
+                        borderRadius: '50%'
+                    }}></img>
+                    {authContext.name}
+                </>
+            </NavbarLink >,
             <NavbarLink to="/logout" key="logout">Logout</NavbarLink>
         ];
     }

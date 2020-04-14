@@ -34,7 +34,8 @@ router.post('/login',
         res.json({
             id: req.user.id,
             username: req.user.username,
-            fullname: req.user.fullName
+            fullname: req.user.fullName,
+            avatar: req.user.avatar
         })
     }
 )
