@@ -30,7 +30,7 @@ const Toolbar = props => {
                 <Navbar.Toggle aria-controls="the-navbar-collapse" />
                 <Navbar.Collapse id="the-navbar-collapse">
                     <Nav className="mr-auto">
-                        <NavbarLink to="/campgrounds">Home</NavbarLink>
+                        <NavbarLink to="/campgrounds" exact>Home</NavbarLink>
                     </Nav>
                     <Nav>
                         {rightMenuItems}

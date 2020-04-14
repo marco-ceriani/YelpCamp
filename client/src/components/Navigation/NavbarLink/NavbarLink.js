@@ -4,11 +4,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
 const NavbarLink = props => {
+    const {children, ...rest} = props;
     switch (props.type) {
         case "brand":
-            return <Navbar.Brand as={NavLink} to={props.to}>{props.children}</Navbar.Brand>
+            return <Navbar.Brand as={NavLink} {...rest}>{children}</Navbar.Brand>
         default:
-            return <Nav.Link as={NavLink} to={props.to}>{props.children}</Nav.Link>
+            return <Nav.Link as={NavLink} {...rest}>{children}</Nav.Link>
     }
 }
 
