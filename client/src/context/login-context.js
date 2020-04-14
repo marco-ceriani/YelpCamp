@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 export const LoginContext = React.createContext({
     userId: '',
     username: '',
+    avatar: '',
     login: (id, name) => { },
     logout: () => { },
 });
@@ -11,8 +12,8 @@ const LoginContextProvider = (props) => {
 
     const [user, setUser] = useState(null);
 
-    const loginHandler = (id, name) => {
-        setUser({ id, name });
+    const loginHandler = (id, name, avatar) => {
+        setUser({ id, name, avatar });
     }
     
     const logoutHandler = () => {
@@ -23,6 +24,7 @@ const LoginContextProvider = (props) => {
         <LoginContext.Provider value={{
             userId: user ? user.id : '',
             name: user ? user.name : '',
+            avatar: user && user.avatar,
             login: loginHandler,
             logout: logoutHandler
         }}>

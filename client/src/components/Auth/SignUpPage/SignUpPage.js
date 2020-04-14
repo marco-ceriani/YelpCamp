@@ -26,8 +26,8 @@ const LoginPage = props => {
             avatar: refAvatar.current.value,
             email: refEmail.current.value
         }).then(resp => {
-            const { id, fullname } = resp.data;
-            loginContext.login(id, fullname);
+            const { id, fullname, avatar } = resp.data;
+            loginContext.login(id, fullname, avatar);
         })
     }
 

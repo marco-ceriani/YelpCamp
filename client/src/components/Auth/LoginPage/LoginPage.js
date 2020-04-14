@@ -19,8 +19,8 @@ const LoginPage = props => {
             username: refUsername.current.value,
             password: refPassword.current.value
         }).then(resp => {
-            const { id, fullname } = resp.data;
-            loginContext.login(id, fullname);
+            const { id, fullname, avatar } = resp.data;
+            loginContext.login(id, fullname, avatar);
         }).catch(err => {
             setError(err.message);
         })
