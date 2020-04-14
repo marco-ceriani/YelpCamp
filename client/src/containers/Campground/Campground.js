@@ -42,7 +42,7 @@ const Campground = props => {
                 </Col>
                 <Col md="9">
                     {
-                        campInfo &&
+                        campInfo ?
                         <Card>
                             <Card.Img variant="top" src={campInfo.image} />
                             <Card.Body>
@@ -56,7 +56,7 @@ const Campground = props => {
                                 </p>
                             </Card.Body>
                         </Card>
-                        || <Spinner animation="border" role="status">
+                        : <Spinner animation="border" role="status">
                             <span className="sr-only">Loading...</span>
                         </Spinner>
                     }

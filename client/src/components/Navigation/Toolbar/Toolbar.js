@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavbarLink from '../NavbarLink/NavbarLink';
 
+import { LoginContext } from '../../../context/login-context';
+
 const Toolbar = props => {
 
-    let authInfo = null;
-    //authInfo = {name: "Carmelo"}
+    const authContext = useContext(LoginContext);
 
     let rightMenuItems = [
         <NavbarLink to="/login" key="login">Login</NavbarLink>,
         <NavbarLink to="/register" key="register">Sign Up</NavbarLink>
     ];
-    if (authInfo) {
+    if (authContext && authContext.name) {
         rightMenuItems = [
-            <NavbarLink to="/profile">{authInfo.name}</NavbarLink>,
-            <NavbarLink to="/logout">Logout</NavbarLink>
+            <NavbarLink to="/profile" key="profile">{authContext.name}</NavbarLink>,
+            <NavbarLink to="/logout" key="logout">Logout</NavbarLink>
         ];
     }
 

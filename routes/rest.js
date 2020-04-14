@@ -2,8 +2,10 @@
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
-    campgroundRoutes = require('./rest-campgrounds');
+    campgroundRoutes = require('./rest-campgrounds'),
+    authRoutes = require('./rest-auth');
 
+router.use('/auth', authRoutes);
 router.use('/campgrounds', campgroundRoutes);
 
 const logErrors = (err, req, res, next) => {

@@ -1,0 +1,13 @@
+
+.LogoutBox {
+    text-align: center;
+    margin-top: 15vh;
+}
+
+.Spinner {
+    width: 30vw;
+    height: 30vw;
+    max-width: 30vh;
+    max-height: 30vh;
+    margin-top: 5vh;
+}
