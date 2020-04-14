@@ -14,7 +14,7 @@ const Toolbar = props => {
         <NavbarLink to="/login" key="login">Login</NavbarLink>,
         <NavbarLink to="/register" key="register">Sign Up</NavbarLink>
     ];
-    if (authContext && authContext.name) {
+    if (authContext && authContext.userId) {
         rightMenuItems = [
             <NavbarLink to="/profile" key="profile">{authContext.name}</NavbarLink>,
             <NavbarLink to="/logout" key="logout">Logout</NavbarLink>

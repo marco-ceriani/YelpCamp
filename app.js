@@ -85,7 +85,7 @@ app.use('/rest', restRoutes)
 
 // New React client
 app.get('/v2', (req, res) => {
-	res.sendfile(path.join(__dirname, 'client', 'build', 'index.html'))
+	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 

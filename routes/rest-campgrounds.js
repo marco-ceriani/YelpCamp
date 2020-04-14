@@ -57,7 +57,8 @@ router.get('/:id', function (req, res, next) {
         .then(camp => {
             campObject = addMapURLs(camp.toObject());
             res.json(campObject);
-        }).catch(next);
+        })
+        .catch(next);
 })
 
 function escapeRegex(text) {
