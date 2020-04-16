@@ -1,0 +1,15 @@
+.Title::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f27a";
+    margin-left: .3em;
+    display: inline-block;
+    font-weight: 900;
+}
+
+.AuthorName::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f007";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}
