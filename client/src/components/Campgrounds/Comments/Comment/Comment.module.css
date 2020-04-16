@@ -1,0 +1,13 @@
+
+.AuthorName::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f007";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}
+
+.Button {
+    min-width: 5rem;
+    margin-right: .2rem;
+}

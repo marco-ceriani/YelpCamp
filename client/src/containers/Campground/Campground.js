@@ -28,6 +28,33 @@ const Campground = props => {
             });
     }, [campId]);
 
+    const newCommentHandler = (comment) => {
+        return axios.post(`/rest/campgrounds/${campId}/comments`, {
+            text: comment
+        }).then(resp => {
+            const newComment = resp.data;
+            setComments([...comments, newComment]);
+            return newComment;
+        })
+    }
+
+    const updateCommentHandler = (comment) => {
+        return axios.put(`/rest/campgrounds/${campId}/comments/${comment._id}`, comment)
+            .then(resp => {
+                const updatedComment = resp.data;
+                setComments(comments.map(c => c._id === updatedComment._id ? updatedComment : c));
+                return updatedComment;
+            })
+    }
+
+    const commentDeleteHandler = (commentId) => {
+        console.log('DELETE', campId, commentId)
+        return axios.delete(`/rest/campgrounds/${campId}/comments/${commentId}`)
+            .then(resp => {
+                setComments(comments.filter(cm => cm._id !== commentId));
+            })
+    }
+
     return (
         <Container>
             <Row>
@@ -43,24 +70,28 @@ const Campground = props => {
                 <Col md="9">
                     {
                         campInfo ?
-                        <Card>
-                            <Card.Img variant="top" src={campInfo.image} />
-                            <Card.Body>
-                                <div className="d-flex justify-content-between">
-                                    <Card.Title>{campInfo.name}</Card.Title>
-                                    <h5 className="text-right">{campInfo.price}/night</h5>
-                                </div>
-                                <p>{campInfo.description}</p>
-                                <p>
-                                    <em>Submitted By <a href={`/users/${campInfo.author.id}`}>{campInfo.author.username}</a>, {moment(campInfo.createdAt).fromNow()}</em>
-                                </p>
-                            </Card.Body>
-                        </Card>
-                        : <Spinner animation="border" role="status">
-                            <span className="sr-only">Loading...</span>
-                        </Spinner>
+                            <Card>
+                                <Card.Img variant="top" src={campInfo.image} />
+                                <Card.Body>
+                                    <div className="d-flex justify-content-between">
+                                        <Card.Title>{campInfo.name}</Card.Title>
+                                        <h5 className="text-right">{campInfo.price}/night</h5>
+                                    </div>
+                                    <p>{campInfo.description}</p>
+                                    <p>
+                                        <em>Submitted By <a href={`/users/${campInfo.author.id}`}>{campInfo.author.username}</a>, {moment(campInfo.createdAt).fromNow()}</em>
+                                    </p>
+                                </Card.Body>
+                            </Card>
+                            : <Spinner animation="border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
                     }
-                    <Comments comments={comments} />
+                    <Comments
+                        comments={comments}
+                        onNewComment={newCommentHandler}
+                        onUpdateComment={updateCommentHandler}
+                        onCommentDelete={commentDeleteHandler} />
                 </Col>
             </Row>
         </Container>
