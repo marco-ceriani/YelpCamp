@@ -33,7 +33,7 @@ const Campground = props => {
             text: comment
         }).then(resp => {
             const newComment = resp.data;
-            setComments([...comments, newComment]);
+            setComments([newComment, ...comments]);
             return newComment;
         })
     }
