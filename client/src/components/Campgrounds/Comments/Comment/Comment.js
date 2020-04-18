@@ -1,9 +1,19 @@
 import React, { useState, useRef } from 'react';
 import moment from 'moment';
 
-import { ListGroup, Button, Form } from 'react-bootstrap';
+import { ListGroup, Form } from 'react-bootstrap';
 
 import classes from './Comment.module.css';
+import CommentButton from './CommentButton/CommentButton';
+
+const CommentHeader = props => {
+    return (
+        <div className="d-flex justify-content-between mb-1">
+            <strong className={classes.AuthorName}>{props.author.username}</strong>
+            <span>{moment(props.createdAt).fromNow()}</span>
+        </div>
+    );
+}
 
 const Comment = props => {
 
@@ -12,13 +22,6 @@ const Comment = props => {
     const [editing, setEditing] = useState(false);
     const [currentComment, setCurrentComment] = useState(comment.text);
     const textAreaRef = useRef(null);
-
-    const commentHeader = (
-        <div className="d-flex justify-content-between mb-1">
-            <strong className={classes.AuthorName}>{comment.author.username}</strong>
-            <span>{moment(comment.createdAt).fromNow()}</span>
-        </div>
-    );
 
     const editHandler = () => {
         setCurrentComment(textAreaRef.current.value);
@@ -41,19 +44,17 @@ const Comment = props => {
     if (!canUpdate) {
         return (
             <ListGroup.Item>
-                {commentHeader}
+                <CommentHeader {...comment} />
                 <div>{currentComment}</div>
             </ListGroup.Item>
         )
     } else if (!editing) {
         return (
             <ListGroup.Item>
-                {commentHeader}
+                <CommentHeader {...comment} />
                 <div>{currentComment}</div>
-                <Button size="sm" variant="primary" className={classes.Button}
-                    onClick={() => setEditing(true)}><i class="fas fa-edit"></i></Button>
-                <Button size="sm" variant="danger" className={classes.Button}
-                    onClick={() => props.onCommentDelete(comment._id)}><i class="fas fa-trash-alt"></i></Button>
+                <CommentButton variant="edit" onClick={() => setEditing(true)} />
+                <CommentButton variant="delete" onClick={() => props.onCommentDelete(comment._id)} />
             </ListGroup.Item>
         )
     } else {
@@ -61,14 +62,11 @@ const Comment = props => {
             <ListGroup.Item>
                 <Form.Control ref={textAreaRef} as="textarea" rows="5" cols="70" className="mb-1"
                     value={currentComment} onChange={editHandler} />
-                <Button size="sm" variant="secondary" className={classes.Button}
-                    onClick={editUndoHandler}><i class="fas fa-times"></i></Button>
-                <Button size="sm" variant="success" className={classes.Button}
-                    onClick={editConfirmHandler}><i class="fas fa-check-circle"></i></Button>
+                <CommentButton variant="cancel" onClick={editUndoHandler} />
+                <CommentButton variant="confirm" onClick={editConfirmHandler} />
             </ListGroup.Item>
         )
     }
-
 
 }
 
