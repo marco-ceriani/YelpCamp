@@ -52,8 +52,7 @@ router.get('/:id', function (req, res, next) {
     const id = req.params.id;
 
     Campground
-        .findById(id)
-        .populate({path: 'comments', options: {sort: {createdAt: -1}}})
+        .findById(id, '-comments')
         .then(camp => {
             campObject = addMapURLs(camp.toObject());
             res.json(campObject);
