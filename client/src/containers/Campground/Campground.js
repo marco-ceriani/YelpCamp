@@ -17,43 +17,14 @@ const Campground = props => {
     const campId = props.match.params.id;
 
     const [campInfo, setCampInfo] = useState(null);
-    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         axios.get(`/rest/campgrounds/${campId}`)
             .then(resp => {
                 const { comments, ...info } = resp.data;
                 setCampInfo(info);
-                setComments(comments);
             });
     }, [campId]);
-
-    const newCommentHandler = (comment) => {
-        return axios.post(`/rest/campgrounds/${campId}/comments`, {
-            text: comment
-        }).then(resp => {
-            const newComment = resp.data;
-            setComments([newComment, ...comments]);
-            return newComment;
-        })
-    }
-
-    const updateCommentHandler = (comment) => {
-        return axios.put(`/rest/campgrounds/${campId}/comments/${comment._id}`, comment)
-            .then(resp => {
-                const updatedComment = resp.data;
-                setComments(comments.map(c => c._id === updatedComment._id ? updatedComment : c));
-                return updatedComment;
-            })
-    }
-
-    const commentDeleteHandler = (commentId) => {
-        console.log('DELETE', campId, commentId)
-        return axios.delete(`/rest/campgrounds/${campId}/comments/${commentId}`)
-            .then(resp => {
-                setComments(comments.filter(cm => cm._id !== commentId));
-            })
-    }
 
     return (
         <Container>
@@ -88,10 +59,11 @@ const Campground = props => {
                             </Spinner>
                     }
                     <Comments
-                        comments={comments}
-                        onNewComment={newCommentHandler}
-                        onUpdateComment={updateCommentHandler}
-                        onCommentDelete={commentDeleteHandler} />
+                        campId={campId}
+                        // onNewComment={newCommentHandler}
+                        // onUpdateComment={updateCommentHandler}
+                        // onCommentDelete={commentDeleteHandler}
+                    />
                 </Col>
             </Row>
         </Container>

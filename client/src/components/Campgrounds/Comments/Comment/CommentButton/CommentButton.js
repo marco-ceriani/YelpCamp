@@ -10,19 +10,19 @@ const CommentButton = props => {
     switch (props.variant) {
         case 'edit':
             variant = "primary";
-            icon = <i class="fas fa-edit"></i>
+            icon = <i className="fas fa-edit"></i>
             break;
         case 'delete':
             variant = "danger";
-            icon = <i class="fas fa-trash-alt"></i>
+            icon = <i className="fas fa-trash-alt"></i>
             break;
         case 'confirm':
             variant = "success";
-            icon = <i class="fas fa-check-circle"></i>
+            icon = <i className="fas fa-check-circle"></i>
             break;
         case 'cancel':
             variant = "secondary";
-            icon = <i class="fas fa-times"></i>
+            icon = <i className="fas fa-times"></i>
             break;
             
     }
