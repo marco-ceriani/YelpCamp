@@ -11,10 +11,10 @@ var express    = require('express'),
 
 // INDEX CAMPGROUNDS
 router.get('/', function(req, res) {
-    var filter = {}
+    const filter = {public: true}
     if (req.query.search) {
         const regex = new RegExp(escapeRegex(req.query.search), 'gi')
-        filter = { name: regex}
+        filter.name = regex
     }
     Campground.find(filter, function(err, foundCampgrounds) {
         if (err) {

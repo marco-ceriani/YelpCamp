@@ -27,7 +27,7 @@ const TopArea = (props) => {
                     <h1>Welcome to YelpCamp</h1>
 
                     <p className="lead">View our hand-picked camp grounds from all over the world</p>
-                    <Button variant="primary" size="lg">Add new Campground</Button>
+                    <Button variant="primary" size="lg" onClick={props.onNewCampground}>Add new Campground</Button>
                     <Form className="mt-2">
                         <Form.Row>
                             <Col xs="auto">

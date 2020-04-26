@@ -6,8 +6,6 @@ import { LoginContext } from '../../context/login-context';
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const authContext = useContext(LoginContext);
 
-    console.log(`Route to ${rest.path}`, authContext)
-
     return <Route {...rest}
         render={(props) => (
             (authContext && authContext.userId)

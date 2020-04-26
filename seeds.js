@@ -214,7 +214,14 @@ async function seedDB(numCamps = 11) {
     console.log('----- CREATE TEST DATA -----')
 }
 
+const patchSchema = async () => {
+    Campground.updateMany({public: {$exists: false}}, {public: true})
+    .then(res => console.log(res))
+    .catch(err => console.log('error ' + err));
+}
+
 module.exports = {
     createData: seedDB,
-    clearDB: clearDB
+    clearDB: clearDB,
+    patchSchema: patchSchema
 }
