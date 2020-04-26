@@ -101,6 +101,7 @@ initPromise.then(function () {
 		seedDB.createData()
 	}
 })
+seedDB.patchSchema()
 
 var port = process.env.PORT || 8080
 app.listen(port, process.env.IP, function () {

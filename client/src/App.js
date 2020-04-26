@@ -10,10 +10,11 @@ import Toolbar from './components/Navigation/Toolbar/Toolbar';
 import LandingPage from './components/LandingPage/LandingPage';
 import Campgrounds from './containers/Campgrounds/Campgrounds';
 import Campground from './containers/Campground/Campground';
+import CampgroundEditor from './containers/Campground/CampgroundEditor/CampgroundEditor';
 import LoginPage from './components/Auth/LoginPage/LoginPage';
 import SignUpPage from './components/Auth/SignUpPage/SignUpPage';
 import LogoutPage from './components/Auth/LogoutPage/LogoutPage';
-import Profile from './components/Users/Profile/Profile';
+import Profile from './containers/Profile/Profile';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Switch>
         <Route path="/campgrounds" exact component={Campgrounds} />
         <Route path="/campgrounds/:id" exact component={Campground} />
+        <Route path="/campgrounds/:id/edit" exact component={CampgroundEditor} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={SignUpPage} />
         <Route path="/logout" component={LogoutPage} />

@@ -5,11 +5,12 @@ var express = require('express'),
     campgroundRoutes = require('./rest-campgrounds'),
     authRoutes = require('./rest-auth'),
     commentsRoutes = require('./rest-comments');
+const userRoutes = require('./rest-users');
 
 router.use('/auth', authRoutes);
 router.use('/campgrounds', campgroundRoutes);
 router.use('/campgrounds/:camp_id/comments', commentsRoutes);
-commentsRoutes
+router.use('/users', userRoutes);
 
 const logErrors = (err, req, res, next) => {
     console.error('Request error ' + err.stack);

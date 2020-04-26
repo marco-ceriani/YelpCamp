@@ -21,10 +21,9 @@ const formatCampForList = camp => {
 
 // INDEX CAMPGROUNDS
 router.get('/', function (req, res) {
-    var filter = {}
+    const filter = { public: true }
     if (req.query.search) {
-        const regex = new RegExp(escapeRegex(req.query.search), 'gi')
-        filter = { name: regex }
+        filter.name = new RegExp(escapeRegex(req.query.search), 'gi')
     }
     Campground.find(filter, function (err, foundCampgrounds) {
         let result = {
@@ -35,7 +34,6 @@ router.get('/', function (req, res) {
                 code: 500,
                 message: err
             }
-            console.log(err)
         } else if (foundCampgrounds.length < 1) {
             result.error = {
                 code: 404,
@@ -45,6 +43,27 @@ router.get('/', function (req, res) {
 
         res.json(result)
     })
+})
+
+// CREATE CAMPGROUND
+router.post('/', middleware.isLoggedIn, (req, res, next) => {
+    const newCampground = {
+        ...req.body,
+        author: {
+            id: req.user._id,
+            username: req.user.username
+        },
+    }
+    Campground.create(newCampground)
+        .then(camp => {
+            const result = {
+                camp: {
+                    id: camp._id,
+                    createdAt: camp.createdAt
+                }
+            }
+            res.json(result)
+        }).catch(next);
 })
 
 // SHOW CAMPGROUND
@@ -58,6 +77,40 @@ router.get('/:id', function (req, res, next) {
             res.json(campObject);
         })
         .catch(next);
+})
+
+// UPDATE CAMPGROUND
+router.put('/:id', middleware.isLoggedIn, async (req, res, next) => {
+    try {
+        const newValue = {
+            ...req.body,
+            author: {
+                id: req.user._id,
+            },
+            location: await geolocator.decode(req.body.location)
+        }
+        const camp = await Campground.findByIdAndUpdate(req.params.id, newValue, {new: true});
+        res.json({
+            camp: addMapURLs(camp.toObject())
+        });
+    } catch (err) {
+        next(err);
+    }
+
+})
+
+
+// DELETE CAMPGROUND
+router.delete('/:id', middleware.isLoggedIn, async (req, res, next) => {
+    try {
+        await Campground.findByIdAndDelete(req.params.id)
+        res.json({
+            id: req.params.id
+        });
+    } catch (err) {
+        next(err);
+    }
+
 })
 
 function escapeRegex(text) {

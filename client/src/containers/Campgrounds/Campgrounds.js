@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom'
 import axios from 'axios';
 
 import TopArea from './TopArea/TopArea';
@@ -21,6 +22,7 @@ const Campgrounds = (props) => {
 
     const [campgrounds, setCampgrounds] = useState([]);
     const [query, setQuery] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         const queryArgs = query ? `?search=${query}` : '';
@@ -30,11 +32,17 @@ const Campgrounds = (props) => {
             })
     }, [query, setCampgrounds]);
 
-    const campgroundsCards = campgrounds.map(campgroundCard);
+    const newCampgroundHandler = () => {
+        axios.post('/rest/campgrounds')
+            .then(resp => resp.data.camp)
+            .then(camp => {
+                history.push(`/campgrounds/${camp.id}/edit`);
+            })
+    }
 
     return (
         <Container>
-            <TopArea query={query} queryChanged={setQuery} />
+            <TopArea query={query} queryChanged={setQuery} onNewCampground={newCampgroundHandler}/>
 
             <Row>
                 <Col lg="12">
@@ -43,7 +51,7 @@ const Campgrounds = (props) => {
             </Row>
 
             <Row className="text-center">
-                {campgroundsCards}
+                {campgrounds.map(campgroundCard)}
             </Row>
 
         </Container>
