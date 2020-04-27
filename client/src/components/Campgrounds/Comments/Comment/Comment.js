@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import { ListGroup, Form } from 'react-bootstrap';
@@ -20,16 +20,15 @@ const Comment = props => {
     const { comment, editable, editing, onCommentEdit, onCommentUpdate, onCommentCancel } = props;
 
     const [currentComment, setCurrentComment] = useState(comment.text);
-    const textAreaRef = useRef(null);
 
     useEffect(() => {
         if (!editing) {
             setCurrentComment(comment.text);
         }
-    }, [editing]);
+    }, [editing, comment.text]);
 
-    const editHandler = () => {
-        setCurrentComment(textAreaRef.current.value);
+    const editHandler = (value) => {
+        setCurrentComment(value);
     }
 
     const editUndoHandler = () => {
@@ -37,20 +36,20 @@ const Comment = props => {
         onCommentCancel();
     }
 
-    const editConfirmHandler = () => {
+    const editConfirmHandler = (value) => {
         onCommentUpdate({
             ...comment,
-            text: textAreaRef.current.value
+            text: currentComment
         });
     }
 
     if (editing) {
         return (
             <ListGroup.Item>
-                <Form.Control ref={textAreaRef} as="textarea" rows="5" cols="70" className="mb-1"
-                    value={currentComment} onChange={editHandler} />
+                <Form.Control as="textarea" rows="5" cols="70" className="mb-1"
+                    value={currentComment} onChange={event => editHandler(event.target.value)} />
                 <CommentButton variant="cancel" onClick={editUndoHandler} />
-                <CommentButton variant="confirm" onClick={editConfirmHandler} />
+                <CommentButton variant="confirm" onClick={event => editConfirmHandler(event.target.value)} />
             </ListGroup.Item>
         )
     } else if (editable) {

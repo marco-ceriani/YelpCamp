@@ -24,7 +24,8 @@ const CommentButton = props => {
             variant = "secondary";
             icon = <i className="fas fa-times"></i>
             break;
-            
+        default:
+            variant = "secondary";
     }
     return (
         <Button size="sm" variant={variant} className={classes.Button}

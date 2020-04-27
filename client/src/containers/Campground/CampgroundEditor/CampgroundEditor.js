@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-import { Container, Col, Row, Form, Button, ButtonGroup } from 'react-bootstrap';
+import { Container, Col, Row, Form, Button, ButtonGroup, ResponsiveEmbed } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import Map from '../../../components/Map/Map';
 
@@ -13,15 +13,23 @@ const CampgroundEditor = props => {
     const campId = useParams().id;
     const history = useHistory();
 
-    const [campInfo, setCampInfo] = useState(null);
+    const [campInfo, setCampInfo] = useState({
+        name: '',
+        description: '',
+        price: 0
+    });
 
-    useEffect(() => {
+    const loadCampgroundInfo = useCallback(() => {
         axios.get(`/rest/campgrounds/${campId}`)
             .then(resp => {
                 const { comments, ...info } = resp.data;
                 setCampInfo(info);
             });
     }, [campId]);
+
+    useEffect(() => {
+        loadCampgroundInfo();
+    }, [loadCampgroundInfo]);
 
     if (!campInfo) {
         return <Spinner animation="border" role="status">
@@ -49,10 +57,7 @@ const CampgroundEditor = props => {
     }
 
     const saveHandler = () => {
-        axios.put(`/rest/campgrounds/${campId}`, campInfo)
-            .then(resp => {
-                setCampInfo(resp.data.camp)
-            })
+        saveCampgroundState(campInfo)
     }
 
     const publishHandler = () => {
@@ -83,7 +88,7 @@ const CampgroundEditor = props => {
                     <Form>
                         <div className={classes.ButtonBar}>
                             <ButtonGroup aria-label="edit buttons">
-                                <Button variant="secondary">Cancel</Button>
+                                <Button variant="secondary" onClick={loadCampgroundInfo}>Cancel</Button>
                                 <Button onClick={saveHandler}>Save</Button>
                             </ButtonGroup>
                             {campInfo.public
@@ -109,16 +114,23 @@ const CampgroundEditor = props => {
                                 onChange={event => fieldChangeHandler('price', event)} />
                         </Form.Group>
                         <Form.Group>
+                            <Form.Label>Picture</Form.Label>
                             <Form.Control type="text" autoComplete="off" placeholder="Picture"
                                 value={campInfo.image}
                                 onChange={event => fieldChangeHandler('image', event)} />
+                            {
+                                campInfo.image && <ResponsiveEmbed aspectRatio="4by3">
+                                    <embed type="image/jpeg" src={campInfo.image} />
+                                </ResponsiveEmbed>
+                            }
                         </Form.Group>
                         <Form.Group>
+                            <Form.Label>Campground Location</Form.Label>
                             <Form.Control type="text" autoComplete="off" placeholder="Location"
                                 value={campInfo.location && campInfo.location.textual}
                                 onChange={event => fieldChangeHandler('location', event)} />
+                            <Map url={campInfo && campInfo.mapurl} maplink={campInfo && campInfo.maplink} />
                         </Form.Group>
-                        <Map url={campInfo && campInfo.mapurl} maplink={campInfo && campInfo.maplink} />
                     </Form>
                 </Col>
             </Row>

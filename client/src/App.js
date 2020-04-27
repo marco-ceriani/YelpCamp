@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
-import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import PrivateRoute from './hoc/PrivateRoute/PrivateRoute';

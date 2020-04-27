@@ -4,14 +4,12 @@ import axios from 'axios';
 import { ListGroup, Card, Button } from 'react-bootstrap';
 
 import classes from './Comments.module.css';
-import CommentModal from './CommentModal/CommentModal';
 import Comment from './Comment/Comment';
 import { LoginContext } from '../../../context/login-context';
 
 const Comments = props => {
 
     const { campId } = props;
-    const [commenting, setCommenting] = useState(false);
     const [comments, setComments] = useState([]);
     const [editing, setEditing] = useState(null);
 
