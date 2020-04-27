@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
 
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 import classes from './UserCamps.module.css';
 
 const MyCampgrounds = props => {
@@ -25,24 +25,18 @@ const MyCampgrounds = props => {
 
     const publicCamps = props.campgrounds.filter(camp => (camp.public == null || camp.public));
     const privateCamps = props.campgrounds.filter(camp => camp.public === false);
-    console.log(privateCamps);
-    console.log(publicCamps);
 
     return (
-        <Container>
-            <Row className="justify-content-center">
-                <Col md="9">
-                    {privateCamps.length > 0 && <h3>Campgrounds in preparation</h3>}
-                    <ListGroup>
-                        {privateCamps.map(listItem)}
-                    </ListGroup>
-                    {publicCamps.length > 0 && <h3>Submitted Campgrounds</h3>}
-                    <ListGroup>
-                        {publicCamps.map(listItem)}
-                    </ListGroup>
-                </Col>
-            </Row>
-        </Container>
+        <>
+            {privateCamps.length > 0 && <h3 className={classes.Title}>Campgrounds in preparation</h3>}
+            <ListGroup>
+                {privateCamps.map(listItem)}
+            </ListGroup>
+            {publicCamps.length > 0 && <h3 className={classes.Title}>Submitted Campgrounds</h3>}
+            <ListGroup>
+                {publicCamps.map(listItem)}
+            </ListGroup>
+        </>
     )
 
 }

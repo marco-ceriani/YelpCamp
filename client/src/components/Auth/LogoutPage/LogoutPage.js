@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
-import axios from 'axios';
 
 import { LoginContext } from '../../../context/login-context';
 import classes from './LogoutPage.module.css';

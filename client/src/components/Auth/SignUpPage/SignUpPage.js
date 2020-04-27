@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,7 +8,6 @@ import { LoginContext } from '../../../context/login-context';
 
 const LoginPage = props => {
 
-    const [validated, setValidated] = useState(false);
     const loginContext = useContext(LoginContext);
 
     const refUsername = useRef(null);
