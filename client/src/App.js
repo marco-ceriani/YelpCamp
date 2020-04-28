@@ -22,11 +22,12 @@ function App() {
       <Switch>
         <Route path="/campgrounds" exact component={Campgrounds} />
         <Route path="/campgrounds/:id" exact component={Campground} />
-        <Route path="/campgrounds/:id/edit" exact component={CampgroundEditor} />
+        <PrivateRoute path="/campgrounds/:id/edit" exact component={CampgroundEditor} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={SignUpPage} />
         <Route path="/logout" component={LogoutPage} />
         <PrivateRoute path="/profile" component={Profile} />
+        <Route path="/users/:user" component={Profile} />
         <Route path="/" exact component={LandingPage} />
         <Route><div style={{textAlign: 'center', fontSize: '4rem', paddingTop: '30vh'}}>Page Not found</div></Route>
       </Switch>

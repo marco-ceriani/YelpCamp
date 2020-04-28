@@ -5,6 +5,7 @@ export const LoginContext = React.createContext({
     userId: '',
     username: '',
     avatar: '',
+    fullname: null,
     login: (id, name) => { },
     logout: () => { },
 });
@@ -13,33 +14,43 @@ const LoginContextProvider = (props) => {
 
     const [user, setUser] = useState(null);
 
-    const loginHandler = (id, name, avatar) => {
-        setUser({ id, name, avatar });
-    }
+    const loginHandler = useCallback((newInfo) => {
+        setUser({
+            id: newInfo.id,
+            username: newInfo.username,
+            fullname: newInfo.fullname,
+            avatar: newInfo.avatar
+        });
+    }, [setUser]);
 
     const logoutHandler = useCallback(() => {
         axios.get('/rest/auth/logout')
             .then(setUser(null));
     }, []);
 
+    const authCheck = useCallback(() => {
+        return user != null;
+    }, [user]);
+
     useEffect(() => {
         axios.get('/rest/auth/check')
             .then(resp => {
-                const { id, fullname, avatar } = resp.data;
-                loginHandler(id, fullname, avatar);
+                loginHandler(resp.data);
             })
             .catch(err => {
                 // ignore it
             })
-    }, []);
+    }, [loginHandler]);
 
     return (
         <LoginContext.Provider value={{
             userId: user ? user.id : '',
-            name: user ? user.name : '',
+            username: user ? user.username : '',
             avatar: user && user.avatar,
+            fullname: user && user.fullname,
             login: loginHandler,
-            logout: logoutHandler
+            logout: logoutHandler,
+            isAuthenticated: authCheck
         }}>
             {props.children}
         </LoginContext.Provider>

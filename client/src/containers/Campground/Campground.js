@@ -50,7 +50,7 @@ const Campground = props => {
                                     </div>
                                     <p>{campInfo.description}</p>
                                     <p>
-                                        <em>Submitted By <a href={`/users/${campInfo.author.id}`}>{campInfo.author.username}</a>, {moment(campInfo.createdAt).fromNow()}</em>
+                                        <em>Submitted By <a href={`/v2/users/${campInfo.author.id}`}>{campInfo.author.username}</a>, {moment(campInfo.createdAt).fromNow()}</em>
                                     </p>
                                 </Card.Body>
                             </Card>

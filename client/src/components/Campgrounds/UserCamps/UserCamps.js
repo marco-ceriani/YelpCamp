@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { ListGroup, Button } from 'react-bootstrap';
 import classes from './UserCamps.module.css';
 
-const MyCampgrounds = props => {
+const UserCamps = props => {
 
     const history = useHistory();
 
@@ -19,12 +19,12 @@ const MyCampgrounds = props => {
     const listItem = camp => (
         <ListGroup.Item key={camp._id} className={classes.CampRow} >
             <label className={classes.CampLabel} onClick={() => openCampground(camp._id)}>{camp.name}</label>
-            <Button size="sm" onClick={() => editCampground(camp._id)}>Edit</Button>
+            {props.author && <Button size="sm" onClick={() => editCampground(camp._id)}>Edit</Button>}
         </ListGroup.Item>
     );
 
     const publicCamps = props.campgrounds.filter(camp => (camp.public == null || camp.public));
-    const privateCamps = props.campgrounds.filter(camp => camp.public === false);
+    const privateCamps = props.author? props.campgrounds.filter(camp => camp.public === false) : [];
 
     return (
         <>
@@ -41,4 +41,4 @@ const MyCampgrounds = props => {
 
 }
 
-export default MyCampgrounds;
+export default UserCamps;

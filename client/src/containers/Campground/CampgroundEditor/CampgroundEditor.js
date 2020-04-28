@@ -92,8 +92,8 @@ const CampgroundEditor = props => {
                                 <Button onClick={saveHandler}>Save</Button>
                             </ButtonGroup>
                             {campInfo.public
-                                ? <Button onClick={retireHandler}>Retire</Button>
-                                : <Button onClick={publishHandler}>Publish</Button>}
+                                ? <Button onClick={retireHandler} variant="warning">Retire</Button>
+                                : <Button onClick={publishHandler} variant="success">Publish</Button>}
                             <Button variant="danger" onClick={deleteHanlder}>Delete</Button>
                         </div>
                         <Form.Group controlId="name">
