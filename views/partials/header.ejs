@@ -25,6 +25,7 @@
 				<% if (currentUser && currentUser.isAdmin()) {%>
 					<li class="nav-item <%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %>"><a class="nav-link" href="/users">Users</a></li>
 				<%}%>
+				<li class="nav-item"><a class="nav-link new-ui-button" href="/v2">New UI</a></li>
 			</ul>
 			<ul class="navbar-nav navbar-right ml-auto">
 				<% if (!currentUser) { %>

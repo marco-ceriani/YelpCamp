@@ -15,7 +15,8 @@ var express = require('express'),
 	Campground = require('./models/campground'),
 	Comment = require('./models/comment'),
 	User = require('./models/user'),
-	seedDB = require('./seeds')
+	seedDB = require('./seeds'),
+	path = require('path')
 
 require('dotenv').config()
 
@@ -27,9 +28,10 @@ mongoose.connect(process.env.DATABASE_URL, {
 })
 // Init Express
 app.set('view engine', 'ejs')
-app.use(favicon(__dirname + '/public/camping-tent.png'))
+//app.use(favicon(__dirname + '/public/camping-tent.png'))
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
 app.use(methodOverride('_method'))
 app.use(flash())
 app.locals.moment = require('moment')
@@ -72,13 +74,20 @@ require('./lib/logs')
 var campgroundRoutes = require('./routes/campgrounds'),
 	commentRoutes = require('./routes/comments'),
 	indexRoutes = require('./routes/index'),
-	userRoutes = require('./routes/users')
+	userRoutes = require('./routes/users'),
+	restRoutes = require('./routes/rest')
 
 app.use(indexRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
 app.use('/users', userRoutes)
+app.use('/rest', restRoutes)
 
+// New React client
+app.get(['/v2', '/v2*'], (req, res) => {
+	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+})
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 var args = process.argv.slice(2)
 var initPromise;
@@ -92,6 +101,7 @@ initPromise.then(function () {
 		seedDB.createData()
 	}
 })
+seedDB.patchSchema()
 
 var port = process.env.PORT || 8080
 app.listen(port, process.env.IP, function () {

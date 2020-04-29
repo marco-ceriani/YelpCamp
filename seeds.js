@@ -102,7 +102,7 @@ async function clearDB() {
 async function seedUsers(requestedUsers = 30) {
     const numUsers = await User.estimatedDocumentCount();
     promises = []
-    if (numUsers == 0) {
+    if (numUsers <= 1) {
         promises = userSeeds.map(async user => {
             let newUser = new User(user)
             delete newUser.password
@@ -178,7 +178,7 @@ async function addCampgroundComments(campground, users, range = [5, 15], length 
 }
 
 async function seedDB(numCamps = 11) {
-
+    console.log('----- CREATE TEST DATA -----')
     await seedUsers()
     let users = await User.find({}, '+_id')
 
@@ -211,10 +211,17 @@ async function seedDB(numCamps = 11) {
         )
     }
     await Promise.all(promises)
+    console.log('----- CREATE TEST DATA -----')
+}
 
+const patchSchema = async () => {
+    Campground.updateMany({public: {$exists: false}}, {public: true})
+    .then(res => console.log(res))
+    .catch(err => console.log('error ' + err));
 }
 
 module.exports = {
     createData: seedDB,
-    clearDB: clearDB
+    clearDB: clearDB,
+    patchSchema: patchSchema
 }

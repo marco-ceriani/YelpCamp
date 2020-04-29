@@ -1,0 +1,8 @@
+
+.AuthorName::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f007";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}

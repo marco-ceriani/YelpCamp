@@ -1,0 +1,22 @@
+.Title {
+    display: block;
+    margin-top: 1rem;
+}
+
+.CampRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CampLabel {
+    color: var(--primary);
+    font-size: 1.25rem;
+    margin: 0.25rem 0.5rem;
+    box-sizing: border-box;
+    border-bottom: 1px solid transparent;
+}
+
+.CampLabel:hover, .CampLabel:active {
+    border-bottom: 1px solid currentColor;
+}
