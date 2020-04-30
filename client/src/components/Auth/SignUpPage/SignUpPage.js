@@ -26,7 +26,7 @@ const LoginPage = props => {
             email: refEmail.current.value
         }).then(resp => {
             const { id, fullname, avatar } = resp.data;
-            loginContext.login(id, fullname, avatar);
+            loginContext.setUser(id, fullname, avatar);
         })
     }
 

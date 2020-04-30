@@ -1,47 +1,20 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { Container, Row, Col, ResponsiveEmbed } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
-import { LoginContext } from '../../context/login-context';
 import classes from './Profile.module.css';
 import MyCampgrounds from '../../components/Campgrounds/UserCamps/UserCamps';
+import useDataFetcher, { FetchSpinner, ErrorMessage } from '../../hooks/data-fetcher';
 
 const Profile = (props) => {
 
-    const authContext = useContext(LoginContext);
-    const routeUser = useParams().user;
+    const { user: userId } = useParams();
 
-    const loggedUserData = useCallback(() => {
-        return {
-            _id: authContext.userId,
-            fullName: authContext.fullname,
-            username: authContext.username,
-            avatar: authContext.avatar
-        }
-    }, [authContext]);
+    const [{ data: userInfo, isLoading: userLoading, error: userError }] = useDataFetcher(
+        `/rest/users/${userId}`, { _id: userId });
 
-    const [userInfo, setUserInfo] = useState(routeUser === 'self' ? loggedUserData()
-        : { _id: routeUser, fullName: '', username: null, avatar: null });
-    const [campgrounds, setCampgrounds] = useState([]);
-
-    useEffect(() => {
-        axios.get(`/rest/users/${userInfo._id}/campgrounds`)
-            .then(resp => {
-                setCampgrounds(resp.data.campgrounds)
-            });
-    }, [userInfo._id]);
-
-    useEffect(() => {
-        if (routeUser !== 'self') {
-            axios.get(`/rest/users/${userInfo._id}`)
-                .then(resp => {
-                    setUserInfo(resp.data);
-                });
-        } else {
-            setUserInfo(loggedUserData());
-        }
-    }, [userInfo._id, routeUser, loggedUserData]);
+    const [{ data: { campgrounds }, isLoading: campsLoading, error: campsError }] = useDataFetcher(
+        `/rest/users/${userInfo._id}/campgrounds`, { campgrounds: [] });
 
     return (
         <Container>
@@ -52,6 +25,8 @@ const Profile = (props) => {
                     </ResponsiveEmbed>
                 </Col>
                 <Col sm="6">
+                    <FetchSpinner isLoading={userLoading} />
+                    <ErrorMessage message="Error loading user's profile" error={userError} />
                     <h1>{userInfo.fullName}</h1>
                     <span className="font-italic">@{userInfo.username}</span>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci commodi quasi ipsum. Molestias, minus perferendis. Nostrum illum quidem ipsa natus dolorem itaque alias facilis dignissimos in. Harum non modi quam.</p>
@@ -59,7 +34,9 @@ const Profile = (props) => {
             </Row>
             <Row className={classes.Campgrounds}>
                 <Col lg="9">
-                    <MyCampgrounds campgrounds={campgrounds} author={routeUser === 'self'} />
+                    <FetchSpinner isLoading={campsLoading} />
+                    <ErrorMessage message="Error loading user's campgrounds" error={campsError} />
+                    <MyCampgrounds campgrounds={campgrounds} />
                 </Col>
             </Row>
         </Container>

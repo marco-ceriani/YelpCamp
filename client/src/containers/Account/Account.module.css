@@ -1,0 +1,9 @@
+.Image {
+    border: 0.15rem solid var(--gray);
+    border-radius: 100%;
+}
+
+.Campgrounds {
+    margin-top: 0.5rem;
+    justify-content: right;
+}

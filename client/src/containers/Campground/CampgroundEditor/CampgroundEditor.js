@@ -1,40 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import { Container, Col, Row, Form, Button, ButtonGroup, ResponsiveEmbed } from 'react-bootstrap';
-import Spinner from 'react-bootstrap/Spinner';
+import useDataFetcher, { FetchSpinner, ErrorMessage } from '../../../hooks/data-fetcher';
 import Map from '../../../components/Map/Map';
 
 import classes from './CampgroundEditor.module.css';
 
+const EMPTY_INFO = {
+    name: '',
+    description: '',
+    price: 0,
+    image: '',
+    location: { textual: '' }
+}
+
 const CampgroundEditor = props => {
 
-    const campId = useParams().id;
+    const { id: campId } = useParams();
     const history = useHistory();
 
-    const [campInfo, setCampInfo] = useState({
-        name: '',
-        description: '',
-        price: 0
-    });
+    const [{ data: campInfo, isLoading, error }, {fetchData, setData}] = useDataFetcher(
+        `/rest/campgrounds/${campId}`, EMPTY_INFO);
 
-    const loadCampgroundInfo = useCallback(() => {
-        axios.get(`/rest/campgrounds/${campId}`)
-            .then(resp => {
-                const { comments, ...info } = resp.data;
-                setCampInfo(info);
-            });
-    }, [campId]);
-
-    useEffect(() => {
-        loadCampgroundInfo();
-    }, [loadCampgroundInfo]);
+    const reloadInfo = useCallback(() => {
+        fetchData(`/rest/campgrounds/${campId}`, { force: true });
+    }, [campId, fetchData]);
 
     if (!campInfo) {
-        return <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-        </Spinner>
+        return <FetchSpinner isLoading={isLoading} />
     }
 
     const fieldChangeHandler = (field, event) => {
@@ -46,13 +41,13 @@ const CampgroundEditor = props => {
         } else {
             newInfo[field] = event.target.value
         }
-        setCampInfo(newInfo);
+        setData(newInfo);
     }
 
     const saveCampgroundState = (info) => {
         axios.put(`/rest/campgrounds/${campId}`, info)
             .then(resp => {
-                setCampInfo(resp.data.camp)
+                setData(resp.data.camp)
             })
     }
 
@@ -88,7 +83,7 @@ const CampgroundEditor = props => {
                     <Form>
                         <div className={classes.ButtonBar}>
                             <ButtonGroup aria-label="edit buttons">
-                                <Button variant="secondary" onClick={loadCampgroundInfo}>Cancel</Button>
+                                <Button variant="secondary" onClick={reloadInfo}>Cancel</Button>
                                 <Button onClick={saveHandler}>Save</Button>
                             </ButtonGroup>
                             {campInfo.public
@@ -96,6 +91,7 @@ const CampgroundEditor = props => {
                                 : <Button onClick={publishHandler} variant="success">Publish</Button>}
                             <Button variant="danger" onClick={deleteHanlder}>Delete</Button>
                         </div>
+                        <ErrorMessage message="Error loading info" error={error} />
                         <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
                             <Form.Control type="text" size="lg"

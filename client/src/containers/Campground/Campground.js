@@ -1,30 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import moment from 'moment';
 
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Card from 'react-bootstrap/Card';
-import Spinner from 'react-bootstrap/Spinner';
+import { Container, Row, Col, ListGroup, Card } from 'react-bootstrap';
 
 import Map from '../../components/Map/Map';
 import Comments from '../../components/Campgrounds/Comments/Comments';
+import useDataFetcher, { FetchSpinner } from '../../hooks/data-fetcher';
 
 const Campground = props => {
 
     const campId = props.match.params.id;
 
-    const [campInfo, setCampInfo] = useState(null);
-
-    useEffect(() => {
-        axios.get(`/rest/campgrounds/${campId}`)
-            .then(resp => {
-                const { comments, ...info } = resp.data;
-                setCampInfo(info);
-            });
-    }, [campId]);
+    const [{ data: campInfo, isLoading, error }] = useDataFetcher(`/rest/campgrounds/${campId}`, null);
 
     return (
         <Container>
@@ -39,6 +26,7 @@ const Campground = props => {
                     <Map url={campInfo && campInfo.mapurl} maplink={campInfo && campInfo.maplink} />
                 </Col>
                 <Col md="9">
+                    <FetchSpinner isLoading={isLoading} />
                     {
                         campInfo ?
                             <Card>
@@ -54,15 +42,9 @@ const Campground = props => {
                                     </p>
                                 </Card.Body>
                             </Card>
-                            : <Spinner animation="border" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </Spinner>
+                            : null
                     }
-                    <Comments
-                        campId={campId}
-                        // onNewComment={newCommentHandler}
-                        // onUpdateComment={updateCommentHandler}
-                        // onCommentDelete={commentDeleteHandler}
+                    <Comments campId={campId}
                     />
                 </Col>
             </Row>

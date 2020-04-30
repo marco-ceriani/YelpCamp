@@ -1,38 +1,39 @@
 import React, { useRef, useContext, useState } from 'react';
-import axios from 'axios';
 
 import { Container, Form, Button, Col, Alert } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
 import { LoginContext } from '../../../context/login-context';
 
-const LoginPage = props => {
+const LoginPage = () => {
 
     const refUsername = useRef(null);
     const refPassword = useRef(null);
     const loginContext = useContext(LoginContext);
     const [error, setError] = useState(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        axios.post('/rest/auth/login', {
-            username: refUsername.current.value,
-            password: refPassword.current.value
-        }).then(resp => {
-            loginContext.login(resp.data);
-        }).catch(err => {
+        try {
+            await loginContext.login({
+                username: refUsername.current.value,
+                password: refPassword.current.value
+            });
+        } catch (err) {
             setError(err.message);
-        })
+        }
     }
 
-    const redirGuard = loginContext.userId && <Redirect to="/campgrounds" />
+    if (loginContext.isAuthenticated()) {
+        return <Redirect to="/campgrounds" />;
+    }
+
     const errorBanner = error && (
         <Alert variant="danger">The username or password is invalid</Alert>
     );
 
     return (
         <Container>
-            {redirGuard}
             <Col sm="9" lg="6" className="mx-auto">
                 <h1 className="text-center mb-4">Login</h1>
                 {errorBanner}

@@ -6,15 +6,16 @@ export const LoginContext = React.createContext({
     username: '',
     avatar: '',
     fullname: null,
-    login: (id, name) => { },
+    login: (username, password) => { },
     logout: () => { },
+    isAuthenticated: () => {}
 });
 
 const LoginContextProvider = (props) => {
 
     const [user, setUser] = useState(null);
 
-    const loginHandler = useCallback((newInfo) => {
+    const setCurrentUserHandler = useCallback((newInfo) => {
         setUser({
             id: newInfo.id,
             username: newInfo.username,
@@ -23,24 +24,39 @@ const LoginContextProvider = (props) => {
         });
     }, [setUser]);
 
+    const loginHandler = useCallback(async ({username, password}) => {
+        const resp = await axios.post('/rest/auth/login', {
+            username: username,
+            password: password
+        })        
+        const newInfo = resp.data;
+        setUser({
+            id: newInfo.id,
+            username: newInfo.username,
+            fullname: newInfo.fullname,
+            avatar: newInfo.avatar
+        })
+        return newInfo;
+    }, [setUser]);
+
     const logoutHandler = useCallback(() => {
         axios.get('/rest/auth/logout')
             .then(setUser(null));
     }, []);
 
-    const authCheck = useCallback(() => {
+    const isLogged = useCallback(() => {
         return user != null;
     }, [user]);
 
     useEffect(() => {
         axios.get('/rest/auth/check')
             .then(resp => {
-                loginHandler(resp.data);
+                setCurrentUserHandler(resp.data);
             })
             .catch(err => {
                 // ignore it
             })
-    }, [loginHandler]);
+    }, [setCurrentUserHandler]);
 
     return (
         <LoginContext.Provider value={{
@@ -48,9 +64,10 @@ const LoginContextProvider = (props) => {
             username: user ? user.username : '',
             avatar: user && user.avatar,
             fullname: user && user.fullname,
+            setUser: setCurrentUserHandler,
             login: loginHandler,
             logout: logoutHandler,
-            isAuthenticated: authCheck
+            isAuthenticated: isLogged
         }}>
             {props.children}
         </LoginContext.Provider>
