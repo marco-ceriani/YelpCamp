@@ -15,6 +15,7 @@ import SignUpPage from './components/Auth/SignUpPage/SignUpPage';
 import LogoutPage from './components/Auth/LogoutPage/LogoutPage';
 import Account from './containers/Account/Account';
 import Profile from './containers/Profile/Profile';
+import Page404 from './components/Navigation/Page404/Page404';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
         <PrivateRoute path="/account" component={Account} />
         <Route path="/users/:user" component={Profile} />
         <Route path="/" exact component={LandingPage} />
-        <Route><div style={{textAlign: 'center', fontSize: '4rem', paddingTop: '30vh'}}>Page Not found</div></Route>
+        <Route><Page404 /></Route>
       </Switch>
     </>
   );

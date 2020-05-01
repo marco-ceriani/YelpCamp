@@ -1,4 +1,5 @@
 import React, { useRef, useContext, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import { Container, Form, Button, Col, Alert } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
@@ -12,6 +13,9 @@ const LoginPage = () => {
     const loginContext = useContext(LoginContext);
     const [error, setError] = useState(null);
 
+    const location = useLocation();
+    const history = useHistory();
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -19,14 +23,19 @@ const LoginPage = () => {
                 username: refUsername.current.value,
                 password: refPassword.current.value
             });
+            if (location.state && location.state.from) {
+                history.push(location.state.from.pathname);
+            } else {
+                history.push('/campgrounds');
+            }
         } catch (err) {
             setError(err.message);
         }
     }
 
-    if (loginContext.isAuthenticated()) {
-        return <Redirect to="/campgrounds" />;
-    }
+    // if (loginContext.isAuthenticated()) {
+    //     return <Redirect to="/campgrounds" />;
+    // }
 
     const errorBanner = error && (
         <Alert variant="danger">The username or password is invalid</Alert>
