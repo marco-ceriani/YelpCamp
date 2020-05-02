@@ -84,7 +84,12 @@ const useDataFetcher = (initialUrl, initialData = null) => {
 
 export const ErrorMessage = ({ message, error }) => {
     if (error) {
-        return <Alert variant={"danger"}>{message}: {error.status} - {error.statusText}</Alert>
+        let { status, statusText: errorMessage } = error;
+        if (error.data) {
+            status = error.data.code;
+            errorMessage = error.data.message;
+        }
+        return <Alert variant={"danger"}>{message}: {status} - {errorMessage}</Alert>
     }
     return null;
 }

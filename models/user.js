@@ -19,6 +19,17 @@ UserSchema.methods.isAdmin = function() {
     return this.role === 'ADMIN'
 }
 
+UserSchema.methods.forREST = function() {
+    return {
+        id: this._id,
+        username: this.username,
+        fullName: this.fullName,
+        avatar: this.avatar,
+        email: this.email,
+        role: this.role
+    }
+}
+
 UserSchema.plugin(passportLocalMongoose)
 User = mongoose.model('User', UserSchema)
 

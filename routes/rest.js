@@ -6,6 +6,7 @@ var express = require('express'),
     authRoutes = require('./rest-auth'),
     commentsRoutes = require('./rest-comments');
 const userRoutes = require('./rest-users');
+const { ServerError } = require('./errors');
 
 router.use('/auth', authRoutes);
 router.use('/campgrounds', campgroundRoutes);
@@ -21,6 +22,9 @@ const resultErrorHandler = (err, req, res, next) => {
     let statusCode = 500;
     if (err instanceof mongoose.Error.CastError) {
         statusCode = 422;
+    }
+    if (err instanceof ServerError) {
+        statusCode = err.statusCode;
     }
     res.status(statusCode).json({
         status: 'error',

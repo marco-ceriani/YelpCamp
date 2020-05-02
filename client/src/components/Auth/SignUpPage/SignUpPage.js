@@ -18,23 +18,21 @@ const LoginPage = props => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('/rest/auth/register', {
+        loginContext.register({
             username: refUsername.current.value,
             password: refPassword.current.value,
             fullName: refFullName.current.value,
             avatar: refAvatar.current.value,
             email: refEmail.current.value
-        }).then(resp => {
-            const { id, fullname, avatar } = resp.data;
-            loginContext.setUser(id, fullname, avatar);
         })
     }
 
-    const redirGuard = loginContext.userId && <Redirect to="/campgrounds" />
+    if (loginContext.isAuthenticated()) {
+        return <Redirect to="/campgrounds" />
+    }
 
     return (
         <Container>
-            {redirGuard}
             <h1 className="text-center mb-4 mt-5">Sign Up</h1>
             <Row>
                 <Col sm="9" lg="6" className="mx-auto">

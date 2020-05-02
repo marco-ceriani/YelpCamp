@@ -17,7 +17,7 @@ const Toolbar = props => {
     if (authContext && authContext.isAuthenticated()) {
         rightMenuItems = [
             <NavbarLink to="/account" key="profile">
-                <UserButton name={authContext.fullname} avatar={authContext.avatar} />
+                <UserButton name={authContext.fullName} avatar={authContext.avatar} />
             </NavbarLink >,
             <NavbarLink to="/logout" key="logout">Logout</NavbarLink>,
         ];
@@ -31,6 +31,7 @@ const Toolbar = props => {
                 <Navbar.Collapse id="the-navbar-collapse">
                     <Nav className="mr-auto">
                         <NavbarLink to="/campgrounds" exact>Home</NavbarLink>
+                        {authContext.isAdmin() && <NavbarLink to="/users" exact >Users</NavbarLink>}
                     </Nav>
                     <Nav>
                         {rightMenuItems}

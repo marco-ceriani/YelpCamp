@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useHistory } from 'react-router-dom'
 import axios from 'axios';
 
 import TopArea from './TopArea/TopArea';
 import CampgroundsGrid from '../../components/Campgrounds/CampgroundsGrid/CampgroundsGrid';
 import useDataFetcher, { ErrorMessage, FetchSpinner } from '../../hooks/data-fetcher';
+import { LoginContext } from '../../context/login-context';
 
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -14,6 +15,7 @@ const Campgrounds = () => {
     const history = useHistory();
 
     const [{ data, isLoading, error }, { fetchData }] = useDataFetcher('/rest/campgrounds', { campgrounds: [] });
+    const authContext = useContext(LoginContext);
 
     useEffect(() => {
         const queryArgs = query ? `?search=${query}` : '';
@@ -30,7 +32,10 @@ const Campgrounds = () => {
 
     return (
         <Container>
-            <TopArea query={query} queryChanged={setQuery} onNewCampground={newCampgroundHandler} />
+            <TopArea
+                query={query}
+                queryChanged={setQuery}
+                onNewCampground={authContext.isAuthenticated() ? newCampgroundHandler : null} />
 
             <Row>
                 <Col lg="12">

@@ -1,0 +1,24 @@
+
+.Admin::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f4fe";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}
+
+.User::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f406";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}
+
+.Disabled::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f4fa";
+    margin-right: .5rem;
+    display: inline-block;
+    font-weight: 900;
+}

@@ -8,9 +8,9 @@ import useDataFetcher, { FetchSpinner, ErrorMessage } from '../../hooks/data-fet
 
 const Account = () => {
 
-    const { userId, fullname, username, avatar } = useContext(LoginContext);
+    const { id, fullName, username, avatar } = useContext(LoginContext);
 
-    const [{ data, isLoading, error }] = useDataFetcher(`/rest/users/${userId}/campgrounds`, { campgrounds: [] });
+    const [{ data, isLoading, error }] = useDataFetcher(`/rest/users/${id}/campgrounds`, { campgrounds: [] });
     const { campgrounds } = data;
 
     return (
@@ -22,7 +22,7 @@ const Account = () => {
                     </ResponsiveEmbed>
                 </Col>
                 <Col sm="6">
-                    <h1>{fullname}</h1>
+                    <h1>{fullName}</h1>
                     <span className="font-italic">@{username}</span>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci commodi quasi ipsum. Molestias, minus perferendis. Nostrum illum quidem ipsa natus dolorem itaque alias facilis dignissimos in. Harum non modi quam.</p>
                 </Col>
@@ -30,7 +30,7 @@ const Account = () => {
             <Row className={classes.Campgrounds}>
                 <Col lg="9">
                     <FetchSpinner isLoading={isLoading} />
-                    <ErrorMessage message="Error loading campgrounds info" error={error} /> 
+                    <ErrorMessage message="Error loading campgrounds info" error={error} />
                     <MyCampgrounds campgrounds={campgrounds} author />
                 </Col>
             </Row>

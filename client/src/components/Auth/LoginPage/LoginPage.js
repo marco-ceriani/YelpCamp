@@ -2,7 +2,6 @@ import React, { useRef, useContext, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 
 import { Container, Form, Button, Col, Alert } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
 
 import { LoginContext } from '../../../context/login-context';
 
@@ -32,10 +31,6 @@ const LoginPage = () => {
             setError(err.message);
         }
     }
-
-    // if (loginContext.isAuthenticated()) {
-    //     return <Redirect to="/campgrounds" />;
-    // }
 
     const errorBanner = error && (
         <Alert variant="danger">The username or password is invalid</Alert>

@@ -2,72 +2,83 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 export const LoginContext = React.createContext({
-    userId: '',
+    id: '',
     username: '',
     avatar: '',
-    fullname: null,
+    fullName: null,
     login: (username, password) => { },
     logout: () => { },
-    isAuthenticated: () => {}
+    isAuthenticated: () => { }
 });
 
 const LoginContextProvider = (props) => {
 
-    const [user, setUser] = useState(null);
+    const initialUser = localStorage.getItem('auth') || '{}';
+    const [user, setUser] = useState(JSON.parse(initialUser));
 
-    const setCurrentUserHandler = useCallback((newInfo) => {
-        setUser({
-            id: newInfo.id,
-            username: newInfo.username,
-            fullname: newInfo.fullname,
-            avatar: newInfo.avatar
-        });
-    }, [setUser]);
+    function setUserCached(userInfo) {
+        if (userInfo && Object.keys(userInfo).length > 0) {
+            setUser(userInfo);
+            localStorage.setItem('auth', JSON.stringify(userInfo))
+        } else {
+            setUser({});
+            localStorage.removeItem('auth');
+        }
+    }
 
-    const loginHandler = useCallback(async ({username, password}) => {
+    const loginHandler = useCallback(async ({ username, password }) => {
         const resp = await axios.post('/rest/auth/login', {
             username: username,
             password: password
-        })        
-        const newInfo = resp.data;
-        setUser({
-            id: newInfo.id,
-            username: newInfo.username,
-            fullname: newInfo.fullname,
-            avatar: newInfo.avatar
         })
-        return newInfo;
+        setUserCached(resp.data)
+        return resp.data;
     }, [setUser]);
 
-    const logoutHandler = useCallback(() => {
-        axios.get('/rest/auth/logout')
-            .then(setUser(null));
+    const registerHandler = useCallback(async (userInfo) => {
+        const resp = await axios.post('/rest/auth/register', userInfo);
+        setUserCached(resp.data)
+    }, [setUser]);
+
+    const logoutHandler = useCallback(async () => {
+        await axios.get('/rest/auth/logout');
+        setUserCached({})
     }, []);
 
     const isLogged = useCallback(() => {
-        return user != null;
+        return user != null && Object.keys(user).length > 0;
+    }, [user]);
+
+    const isAuthenticated = useCallback(() => {
+        return user != null && user.role === 'ADMIN';
     }, [user]);
 
     useEffect(() => {
-        axios.get('/rest/auth/check')
-            .then(resp => {
-                setCurrentUserHandler(resp.data);
-            })
-            .catch(err => {
-                // ignore it
-            })
-    }, [setCurrentUserHandler]);
+        const doCheck = async () => {
+            try {
+                console.log('checking authentication state');
+                const resp = await axios.get('/rest/auth/check');
+                console.log('response:', resp);
+                setUserCached(resp.data)
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    setUserCached({})
+                } else {
+                    console.log('error checking authentication state', error)
+                }
+            }
+        }
+        doCheck();
+    }, [setUser]);
 
     return (
         <LoginContext.Provider value={{
-            userId: user ? user.id : '',
-            username: user ? user.username : '',
-            avatar: user && user.avatar,
-            fullname: user && user.fullname,
-            setUser: setCurrentUserHandler,
+            ...user,
             login: loginHandler,
             logout: logoutHandler,
-            isAuthenticated: isLogged
+            register: registerHandler,
+            isAuthenticated: isLogged,
+            isAdmin: isAuthenticated
         }}>
             {props.children}
         </LoginContext.Provider>

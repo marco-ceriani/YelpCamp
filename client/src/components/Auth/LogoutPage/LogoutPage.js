@@ -7,13 +7,13 @@ import classes from './LogoutPage.module.css';
 
 const LogoutPage = (props) => {
 
-    const { userId, logout } = useContext(LoginContext);
+    const { logout, isAuthenticated } = useContext(LoginContext);
 
     useEffect(() => {
         logout();
     }, [logout]);
 
-    if (!userId) {
+    if (!isAuthenticated()) {
         return <Redirect to="/campgrounds" />
     }
 

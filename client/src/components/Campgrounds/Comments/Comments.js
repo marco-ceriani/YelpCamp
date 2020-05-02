@@ -24,7 +24,7 @@ const Comments = props => {
     }, [campId]);
 
     const canUpdateComment = (comment) => {
-        return authContext.userId === comment.author.id
+        return authContext.id === comment.author.id
     }
 
     const editCommentHandler = (commentId) => {
@@ -79,7 +79,7 @@ const Comments = props => {
                     variant="success"
                     size="sm"
                     onClick={() => setEditing('_NEW_')}
-                    disabled={!authContext.userId}
+                    disabled={!authContext.isAuthenticated()}
                 ><i className="fas fa-plus mr-1"></i>Add new Comment</Button>
             </Card.Header>
             <ListGroup variant="flush">
