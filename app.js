@@ -21,11 +21,7 @@ var express = require('express'),
 require('dotenv').config()
 
 // Connect MongoDB
-mongoose.set('useFindAndModify', false);
-mongoose.connect(process.env.DATABASE_URL, {
-	useNewUrlParser: true,
-	useCreateIndex: true,
-})
+mongoose.connect(process.env.DATABASE_URL, {})
 // Init Express
 app.set('view engine', 'ejs')
 //app.use(favicon(__dirname + '/public/camping-tent.png'))

@@ -158,12 +158,12 @@ async function randomLocation() {
 }
 
 async function addCampgroundComments(campground, users, range = [5, 15], length = [8, 16]) {
-    const numComments = faker.random.number({ min: range[0], max: range[1] })
+    const numComments = faker.datatype.number({ min: range[0], max: range[1] })
     for (let i = 0; i < numComments; i++) {
         let author = randomUser(users)
         let commentInfo = {
             text: faker.lorem.sentence(
-                faker.random.number({ min: length[0], max: length[1] })
+                faker.datatype.number({ min: length[0], max: length[1] })
             ),
             author: {
                 id: author._id,
@@ -187,6 +187,7 @@ async function seedDB(numCamps = 11) {
     promises = []
     let startingCamps = await Campground.estimatedDocumentCount()
     for (let i = startingCamps; i < numCamps; i++) {
+        console.log('creating campground ' + i + '/' + numCamps)
         let author = randomUser(users)
         let picture = randomPicture()
         const newCampgroundData = {
@@ -198,7 +199,8 @@ async function seedDB(numCamps = 11) {
             },
             description: faker.lorem.paragraphs(3) + '\n' + picture.credit,
             price: faker.commerce.price(0, 15, 2, '€'),
-            createdAt: faker.date.past(2)
+            createdAt: faker.date.past(2),
+            public: true
         }
         if (i < campSeeds.length) {
             newCampgroundData.location = campSeeds[i].location
