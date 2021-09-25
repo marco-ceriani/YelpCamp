@@ -48,26 +48,87 @@ const campNames = {
     ]
 }
 
-var campSeeds = [
+// List of random locations with data from OpenStreetMap
+const locations = [
     {
-        name: "Cloud's Rest",
-        location: {
-            textual: "Monte Bianco",
-            geo: {
-                type: "Point",
-                coordinates: [6.8651661, 45.8326753]
-            }
-        }
+        latitude: 45.8327057,
+        longitude: 6.8651706,
+        formattedAddress: 'Monte Bianco',
+        country: 'Italia',
+        countryCode: 'IT'
+    }, {
+        latitude: 5.7330227,
+        longitude: 115.9320971,
+        formattedAddress: 'Papar, Sabah, 89607 PAPAR, Malaysia',
+        country: 'Malaysia',
+        countryCode: 'MY'
+    }, {
+        latitude: 55.0512443,
+        longitude: -162.8916892,
+        formattedAddress: 'Aleutians East, Alaska, United States',
+        country: 'United States',
+        countryCode: 'US'
+    }, {
+        latitude: -3.4178355,
+        longitude: 38.36706762808966,
+        formattedAddress: 'Taita Taveta, Coastal Kenya, Kenya',
+        country: 'Kenya',
+        countryCode: 'KE'
+    }, {
+        latitude: -32.9833175,
+        longitude: 135.32306375148252,
+        formattedAddress: 'Wudinna District Council, South Australia, Australia',
+        country: 'Australia',
+        countryCode: 'AU'
+    }, {
+        latitude: -31.7613365,
+        longitude: -71.3187697,
+        formattedAddress: 'Chile',
+        country: 'Chile',
+        countryCode: 'CL'
+    }, {
+        latitude: 12.2367475,
+        longitude: -3.3387562016398076,
+        formattedAddress: 'Mouhoun, Boucle du Mouhoun, Burkina Faso',
+        country: 'Burkina Faso',
+        countryCode: 'BF'
+    }, {
+        latitude: 69.5191148,
+        longitude: -128.964413,
+        formattedAddress: 'Inuvialuit Settlement Region, Inuvik Region, Northwest Territories, Canada',
+        country: 'Canada',
+        countryCode: 'CA'
+    }, {
+        latitude: 77.6192349,
+        longitude: -42.8125967,
+        formattedAddress: 'Kalaallit Nunaat',
+        country: 'Kalaallit Nunaat',
+        countryCode: 'GL'
     },
     {
-        name: "Sunny Side",
-        location: {
-            textual: "Milano",
-            geo: {
-                type: "Point",
-                coordinates: [9.1885548, 45.4641385]
-            }
-        }
+        latitude: -2.3316707,
+        longitude: -79.4026362,
+        formattedAddress: 'El Triunfo, Ecuador',
+        country: 'Ecuador',
+        countryCode: 'EC'
+    }, {
+        latitude: 31.09381305,
+        longitude: -111.88979063990689,
+        formattedAddress: 'Altar, Sonora, 83750, México',
+        country: 'México',
+        countryCode: 'MX'
+    }, {
+        latitude: 54.787989100000004,
+        longitude: 74.81173078419397,
+        formattedAddress: 'Сергеевское сельское поселение, Оконешниковский район, Омская область, Сибирский федеральный округ, Россия',
+        country: 'Россия',
+        countryCode: 'RU'
+    }, {
+        latitude: 34.2709878,
+        longitude: -4.063217678685499,
+        formattedAddress: 'Meknassa Al Gharbia مكناسة الغربية, caïdat de Meknassa, cercle de Taza دائرة تازة, Province de Taza إقليم تازة, Fès-Meknès ⴼⴰⵙ-ⵎⴽⵏⴰⵙ فاس-مكناس, Maroc / ⵍⵎⵖⵔⵉⴱ / المغرب',
+        country: 'Maroc / ⵍⵎⵖⵔⵉⴱ / المغرب',
+        countryCode: 'MA'
     }
 ]
 
@@ -87,74 +148,56 @@ function randomCampName() {
 
 async function clearDB() {
     console.log('----- CLEAR DB -----')
-    console.log('deleting users')
-    await User.deleteMany({})
     console.log('deleting campgrounds')
     await Campground.deleteMany({})
     console.log('deleting comments')
     await Comment.deleteMany({})
-    console.log('Creating ADMIN user')
-    let user = User.register({ username: 'admin', role: 'ADMIN' }, 'istrator')
+    console.log('deleting users')
+    await User.deleteMany({})
     console.log('----- CLEAR DB -----')
-    return user
+}
+
+async function initDB() {
+    console.log('----- INITIALIZE DB -----')
+    const numUsers = await User.count()
+    if (numUsers == 0) {
+        console.log('creating ADMIN user')
+        User.register({ username: 'admin', role: 'ADMIN' }, 'changeit')
+    }
+    console.log('----- INITIALIZE DB -----')
 }
 
 async function seedUsers(requestedUsers = 30) {
     const numUsers = await User.estimatedDocumentCount();
-    promises = []
-    if (numUsers <= 1) {
-        promises = userSeeds.map(async user => {
-            let newUser = new User(user)
-            delete newUser.password
-            return User.register(newUser, user.password)
-        })
+    if (numUsers < requestedUsers) {
+        promises = []
+        if (numUsers <= 1) {
+            promises = userSeeds.map(async user => {
+                let newUser = new User(user)
+                delete newUser.password
+                return User.register(newUser, user.password)
+            })
+        }
+        console.log('creating users')
+        for (let i = numUsers; i < requestedUsers; i++) {
+            let gender = faker.random.arrayElement([0, 1])
+            let firstName = faker.name.firstName(gender)
+            let lastName = faker.name.lastName(gender)
+            let newUser = new User({
+                username: faker.helpers.slugify(firstName + '.' + lastName).toLowerCase(),
+                fullName: faker.name.findName(firstName, lastName, gender),
+                email: faker.internet.email(firstName, lastName),
+                avatar: faker.image.avatar()
+            })
+            promises.push(User.register(newUser, 'pippo'))
+        }
+        await Promise.all(promises)
+        console.log('created %d users', requestedUsers - numUsers)
     }
-    for (let i = numUsers; i < requestedUsers; i++) {
-        let gender = faker.random.arrayElement([0, 1])
-        let firstName = faker.name.firstName(gender)
-        let lastName = faker.name.lastName(gender)
-        let newUser = new User({
-            username: faker.helpers.slugify(firstName + '.' + lastName).toLowerCase(),
-            fullName: faker.name.findName(firstName, lastName, gender),
-            email: faker.internet.email(firstName, lastName),
-            avatar: faker.image.avatar()
-        })
-        promises.push(User.register(newUser, 'pippo'))
-    }
-    return Promise.all(promises)
 }
 
 function randomUser(users) {
     return users[Math.floor(Math.random() * users.length)]
-}
-
-async function randomLocation() {
-    let coordinates = null
-    let result = null
-    for (let i = 0; i < 5; i++) {
-        coordinates = [
-            Number(faker.address.longitude()),
-            Number(faker.address.latitude())
-        ]
-        try {
-            result = await geolocation.reverse(coordinates[1], coordinates[0], zoom=12)
-            break
-        } catch (err) {
-        }
-    }
-    var location = {
-        geo: {
-            type: "Point",
-            coordinates: coordinates
-        }
-    }
-    if (result) {
-        location.textual = result[0].formattedAddress
-        location.country = result[0].countryCode
-    } else {
-        location.textual = "Somewhere"
-    }
-    return location
 }
 
 async function addCampgroundComments(campground, users, range = [5, 15], length = [8, 16]) {
@@ -190,6 +233,7 @@ async function seedDB(numCamps = 11) {
         console.log('creating campground ' + i + '/' + numCamps)
         let author = randomUser(users)
         let picture = randomPicture()
+        const campLocation = locations[i % locations.length]
         const newCampgroundData = {
             name: randomCampName(),
             image: '/photos/' + picture.filename,
@@ -200,12 +244,15 @@ async function seedDB(numCamps = 11) {
             description: faker.lorem.paragraphs(3) + '\n' + picture.credit,
             price: faker.commerce.price(0, 15, 2, '€'),
             createdAt: faker.date.past(2),
-            public: true
-        }
-        if (i < campSeeds.length) {
-            newCampgroundData.location = campSeeds[i].location
-        } else {
-            newCampgroundData.location = await randomLocation()
+            public: true,
+            location: {
+                geo: {
+                    type: "Point",
+                    coordinates: [campLocation.longitude, campLocation.latitude],
+                },
+                textual: campLocation.formattedAddress,
+                country: campLocation.country
+            }
         }
         let campground = await Campground.create(newCampgroundData)
         promises.push(
@@ -217,13 +264,14 @@ async function seedDB(numCamps = 11) {
 }
 
 const patchSchema = async () => {
-    Campground.updateMany({public: {$exists: false}}, {public: true})
-    .then(res => console.log(res))
-    .catch(err => console.log('error ' + err));
+    Campground.updateMany({ public: { $exists: false } }, { public: true })
+        .then(res => console.log(res))
+        .catch(err => console.log('error ' + err));
 }
 
 module.exports = {
     createData: seedDB,
     clearDB: clearDB,
+    initDB: initDB,
     patchSchema: patchSchema
 }

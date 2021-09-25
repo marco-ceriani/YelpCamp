@@ -21,7 +21,7 @@ var express = require('express'),
 require('dotenv').config()
 
 // Connect MongoDB
-mongoose.connect(process.env.DATABASE_URL, {})
+const dbConnection = mongoose.connect(process.env.DATABASE_URL, {})
 // Init Express
 app.set('view engine', 'ejs')
 //app.use(favicon(__dirname + '/public/camping-tent.png'))
@@ -86,18 +86,10 @@ app.get(['/v2', '/v2*'], (req, res) => {
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 var args = process.argv.slice(2)
-var initPromise;
-if (args.indexOf('--reset') >= 0) {
-	initPromise = seedDB.clearDB()
-} else {
-	initPromise = Promise.resolve()
-}
-initPromise.then(function () {
-	if (process.env !== 'production') {
-		seedDB.createData()
-	}
-})
-seedDB.patchSchema()
+var initChain = dbConnection
+if (args.indexOf('--reset') >= 0) initChain = initChain.then(() => seedDB.clearDB());
+initChain = initChain.then(() => seedDB.initDB());
+if (process.env !== 'production') initChain = initChain.then(() => seedDB.createData());
 
 var port = process.env.PORT || 8080
 app.listen(port, process.env.IP, function () {
