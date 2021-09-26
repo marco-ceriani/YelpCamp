@@ -6,6 +6,11 @@ import NavbarLink from '../NavbarLink/NavbarLink';
 import { LoginContext } from '../../../context/login-context';
 import UserButton from '../UserButton/UserButton';
 
+const logoStyle = {
+    height: '1rem',
+    marginRight: '0.5rem'
+}
+
 const Toolbar = props => {
 
     const authContext = useContext(LoginContext);
@@ -26,7 +31,7 @@ const Toolbar = props => {
     return (
         <Navbar bg="dark" variant="dark" expand="md" className="mb-3">
             <Container>
-                <NavbarLink type="brand" to="/">YelpCamp</NavbarLink>
+                <NavbarLink type="brand" to="/"><img src="../../favicon.ico" className="Toolbar-logo"/>YelpCamp</NavbarLink>
                 <Navbar.Toggle aria-controls="the-navbar-collapse" />
                 <Navbar.Collapse id="the-navbar-collapse">
                     <Nav className="mr-auto">

@@ -19,16 +19,19 @@ const TopArea = (props) => {
         }
     }, [search, queryChanged]);
 
+    const newButton = props.onNewCampground ?
+        <Button
+            variant="primary"
+            size="lg"
+            disabled={props.onNewCampground == null}
+            onClick={props.onNewCampground}>Add new Campground</Button> : null;
+
     return (
         <div className={classes.Jumbotron}>
             <Container>
                 <h1>Welcome to YelpCamp</h1>
                 <p className="lead">View our hand-picked camp grounds from all over the world</p>
-                <Button
-                    variant="primary"
-                    size="lg"
-                    disabled={!props.onNewCampground}
-                    onClick={props.onNewCampground}>Add new Campground</Button>
+                {newButton}
                 <Form className="mt-2 d-flex">
                         <Form.Label srOnly>Search Campgrounds</Form.Label>
                         <InputGroup>
