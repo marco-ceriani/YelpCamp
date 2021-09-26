@@ -5,12 +5,6 @@ var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var User = require("./models/user");
 
-var userSeeds = [
-    { username: "marco", password: "polo", fullName: "Marco Polo", avatar: "https://aff.bstatic.com/images/hotel/max500/850/85071113.jpg" },
-    { username: "pippo", password: "pippo" },
-    { username: "mickey", password: "mouse", fullName: "Mickey Mouse" }
-]
-
 const pictures = [
     { filename: "adrian-393713-unsplash.jpg", credit: "Photo by adrian on Unsplash" },
     { filename: "adventure-alps-camp-618848.jpg", credit: "Photo by Sagui Andrea from Pexels" },
@@ -171,13 +165,6 @@ async function seedUsers(requestedUsers = 30) {
     const numUsers = await User.estimatedDocumentCount();
     if (numUsers < requestedUsers) {
         promises = []
-        if (numUsers <= 1) {
-            promises = userSeeds.map(async user => {
-                let newUser = new User(user)
-                delete newUser.password
-                return User.register(newUser, user.password)
-            })
-        }
         console.log('creating users')
         for (let i = numUsers; i < requestedUsers; i++) {
             let gender = faker.random.arrayElement([0, 1])
@@ -189,7 +176,8 @@ async function seedUsers(requestedUsers = 30) {
                 email: faker.internet.email(firstName, lastName),
                 avatar: faker.image.avatar()
             })
-            promises.push(User.register(newUser, 'pippo'))
+            const password = faker.internet.password()
+            promises.push(User.register(newUser, password))
         }
         await Promise.all(promises)
         console.log('created %d users', requestedUsers - numUsers)
