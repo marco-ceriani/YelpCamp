@@ -156,7 +156,11 @@ async function initDB() {
     const numUsers = await User.count()
     if (numUsers == 0) {
         console.log('creating ADMIN user')
-        User.register({ username: 'admin', role: 'ADMIN' }, 'changeit')
+        User.register({ 
+            username: 'admin',
+            fullName: 'Administrator',
+            role: 'ADMIN'
+        }, 'changeit')
     }
     console.log('----- INITIALIZE DB -----')
 }

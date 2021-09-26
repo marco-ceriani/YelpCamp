@@ -40,6 +40,27 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
+// New user
+router.post('/', middleware.isAdmin, async (req, res, next) => {
+    const { username, password } = req.body;
+    console.log('Creating user %s', username)
+    try {
+        const newUser = new User({
+            username: username,
+            fullName: username
+        })
+        const user = await User.register(newUser, password);
+        res.json({
+            _id: user._id,
+            username: user.username,
+            fullName: user.fullName
+        });
+    } catch (error) {
+        console.log('Error creating user %s', username, error)
+        next(error);
+    }
+})
+
 router.patch('/:id/status', middleware.isAdmin, async (req, res, next) => {
     let actions = {}
     console.log(req.body);
@@ -63,8 +84,14 @@ router.patch('/:id/status', middleware.isAdmin, async (req, res, next) => {
 
 // All users
 router.get('/', middleware.isAdmin, async (req, res, next) => {
+    let filter = {}
+    if (req.query.filter) {
+        filter = {
+            username: new RegExp(req.query.filter, 'gi')
+        }
+    }
     try {
-        const users = await User.find({}, null, { lean: true });
+        const users = await User.find(filter, null, { lean: true });
         res.json({
             users: users
         });
@@ -73,7 +100,7 @@ router.get('/', middleware.isAdmin, async (req, res, next) => {
     }
 })
 
-// All users
+// Delete user
 router.delete('/:id', middleware.isAdmin, async (req, res, next) => {
     try {
         await User.findByIdAndDelete(req.params.id)

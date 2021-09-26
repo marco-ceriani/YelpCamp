@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Container, Row, Col, Table, Button, ButtonGroup } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Container, Row, Col, Form, Table, Button, ButtonGroup, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import useDataFetcher, { ErrorMessage, FetchSpinner } from '../../hooks/data-fetcher';
 import classes from './Users.module.css';
@@ -16,9 +17,31 @@ const iconClass = (user) => {
     return classes.User;
 }
 
+const justifyContentEvenly = {
+    justifyContent: 'space-evenly'
+}
+
+const USERS_API = '/rest/users';
+
 const Users = () => {
 
-    const [{ data, isLoading, error }, { setData }] = useDataFetcher('/rest/users', { users: [] });
+    const [{ data, isLoading, error }, { setData, fetchData }] = useDataFetcher(USERS_API, { users: [] });
+
+    const [filter, setFilter] = useState('');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            let query = '';
+            if (filter) {
+                query = '?filter=' + filter
+            }
+            fetchData(USERS_API + query);
+        }, 700);
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [filter, fetchData]);
 
     const lockUnlockUser = async (user) => {
         const resp = await axios.patch(`/rest/users/${user._id}/status`, {
@@ -39,6 +62,13 @@ const Users = () => {
             <Col>
                 <h3 className="text-center">Registered users</h3>
             </Col>
+        </Row>
+        <Row className="d-flex mt-2 mb-4" style={justifyContentEvenly}>
+            <InputGroup className="w-75">
+                <InputGroup.Text id="user-filter"><i className="fas fa-search"></i></InputGroup.Text>
+                <Form.Control placeholder="filter" aria-label="filter" onChange={event => setFilter(event.target.value)}></Form.Control>
+            </InputGroup>
+            <Button variant="primary"><i className="fas fa-plus"></i></Button>
         </Row>
         <Row>
             <Col>

@@ -22,8 +22,7 @@ const resultErrorHandler = (err, req, res, next) => {
     let statusCode = 500;
     if (err instanceof mongoose.Error.CastError) {
         statusCode = 422;
-    }
-    if (err instanceof ServerError) {
+    } else if (err instanceof ServerError) {
         statusCode = err.statusCode;
     }
     res.status(statusCode).json({
