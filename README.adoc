@@ -1,6 +1,6 @@
 = YelpCamp
 
-YelpCamp is a yelp-like website where users can share reviews and comments on the best campgrounds in the world. I started this project as part of the awesome course by Colt Steele on Udemy called "The Web Developer Bootcamp", then I added a few additional features added later, included a complete reimplementation of the UI from ejs to React.
+YelpCamp is a yelp-like website where users can share reviews and comments on the best campgrounds in the world. I started this project as part of the awesome course by https://github.com/Colt[Colt Steele] on Udemy called "The Web Developer Bootcamp", then I added a few additional features added later, included a complete reimplementation of the UI from ejs to React.
 
 == Requirements
 To run the project you need to have installed Node.js and MongoDB.
