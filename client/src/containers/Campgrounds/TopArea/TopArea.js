@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { Button, Container, Form, InputGroup } from 'react-bootstrap';
+
+import classes from '../Campgrounds.module.css';
 
 const TopArea = (props) => {
 
@@ -22,7 +20,7 @@ const TopArea = (props) => {
     }, [search, queryChanged]);
 
     return (
-        <Jumbotron>
+        <div className={classes.Jumbotron}>
             <Container>
                 <h1>Welcome to YelpCamp</h1>
                 <p className="lead">View our hand-picked camp grounds from all over the world</p>
@@ -31,26 +29,23 @@ const TopArea = (props) => {
                     size="lg"
                     disabled={!props.onNewCampground}
                     onClick={props.onNewCampground}>Add new Campground</Button>
-                <Form className="mt-2">
-                    <Form.Row>
-                        <Col xs="auto">
-                            <Form.Group controlId="searchFilter">
-                                <Form.Label srOnly>Campground Search</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Campground search ..."
-                                    value={search}
-                                    onChange={event => setSearch(event.target.value)}
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col xs="auto">
-                            <Button type="submit" variant="primary">Search</Button>
-                        </Col>
-                    </Form.Row>
+                <Form className="mt-2 d-flex">
+                        <Form.Label srOnly>Search Campgrounds</Form.Label>
+                        <InputGroup>
+                            <InputGroup.Text><i className="fas fa-search"></i></InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder="Search Campgrounds ..."
+                                value={search}
+                                onChange={event => setSearch(event.target.value)}
+                            />
+                        </InputGroup>
+                    <Form.Group controlId="searchFilter">
+
+                    </Form.Group>
                 </Form>
             </Container>
-        </Jumbotron>
+        </div>
     );
 }
 

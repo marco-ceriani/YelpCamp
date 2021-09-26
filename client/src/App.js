@@ -6,7 +6,6 @@ import './App.css';
 import PrivateRoute from './hoc/PrivateRoute/PrivateRoute';
 
 import Toolbar from './components/Navigation/Toolbar/Toolbar';
-import LandingPage from './components/LandingPage/LandingPage';
 import Campgrounds from './containers/Campgrounds/Campgrounds';
 import Campground from './containers/Campground/Campground';
 import CampgroundEditor from './containers/Campground/CampgroundEditor/CampgroundEditor';
@@ -23,7 +22,7 @@ function App() {
     <>
       <Toolbar />
       <Switch>
-        <Route path="/campgrounds" exact component={Campgrounds} />
+        <Route path={["/", "/campgrounds"]} exact component={Campgrounds} />
         <Route path="/campgrounds/:id" exact component={Campground} />
         <PrivateRoute path="/campgrounds/:id/edit" exact component={CampgroundEditor} />
         <Route path="/login" component={LoginPage} />
@@ -32,7 +31,6 @@ function App() {
         <PrivateRoute path="/account" component={Account} />
         <Route path="/users/:user" component={Profile} />
         <PrivateRoute path="/users" exact component={Users} />
-        <Route path="/" exact component={LandingPage} />
         <Route><Page404 /></Route>
       </Switch>
     </>

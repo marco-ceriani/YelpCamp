@@ -16,7 +16,7 @@ const Page404 = () => {
                 </Col>
             </Row>
             <Row className={classes.Buttons}>
-                <Button variant="outline-primary" onClick={() => history.push('/campgrounds')}>Go to the Home page</Button>
+                <Button variant="outline-primary" onClick={() => history.push('/')}>Go to the Home page</Button>
             </Row>
         </Container>
     );

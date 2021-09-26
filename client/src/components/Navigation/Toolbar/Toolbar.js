@@ -30,7 +30,6 @@ const Toolbar = props => {
                 <Navbar.Toggle aria-controls="the-navbar-collapse" />
                 <Navbar.Collapse id="the-navbar-collapse">
                     <Nav className="mr-auto">
-                        <NavbarLink to="/campgrounds" exact>Home</NavbarLink>
                         {authContext.isAdmin() && <NavbarLink to="/users" exact >Users</NavbarLink>}
                     </Nav>
                     <Nav>
