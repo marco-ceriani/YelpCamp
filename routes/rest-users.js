@@ -63,7 +63,6 @@ router.post('/', middleware.isAdmin, async (req, res, next) => {
 
 router.patch('/:id/status', middleware.isAdmin, async (req, res, next) => {
     let actions = {}
-    console.log(req.body);
     if (req.body.enable) {
         actions.$unset = { disabled: '' }
     } else {
@@ -77,6 +76,34 @@ router.patch('/:id/status', middleware.isAdmin, async (req, res, next) => {
         });
         console.log(user);
         res.json(user);
+    } catch (error) {
+        next(error);
+    }
+})
+
+router.patch('/:id/password', middleware.isLoggedIn, async (req, res, next) => {
+    const { currentPassword, newPassword} = req.body;
+    try {
+        if (!newPassword || (!currentPassword && !req.user.isAdmin())) {
+            throw new ValidationError('Required arguments currentPassword, newPassword');
+        }
+
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            throw new ValidationError('Invalid id');
+        }
+        if (req.user.isAdmin()) {
+            await user.setPassword(newPassword);
+        } else if (req.user.id === user.id) {
+            await user.changePassword(currentPassword, newPassword);
+        } else {
+            next({
+                message: 'You can not change the password of this user'
+            })
+        }
+        await user.save();
+        
+        res.json(user.forREST());
     } catch (error) {
         next(error);
     }
