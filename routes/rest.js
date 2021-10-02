@@ -30,7 +30,6 @@ const resultErrorHandler = (err, req, res, next) => {
         code: statusCode,
         message: err.message || 'unknown error'
     });
-    next(err);
 }
 
 router.use(logErrors);

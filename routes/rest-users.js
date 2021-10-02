@@ -81,6 +81,7 @@ router.patch('/:id/status', middleware.isAdmin, async (req, res, next) => {
     }
 })
 
+// Change Password (as admin or self)
 router.patch('/:id/password', middleware.isLoggedIn, async (req, res, next) => {
     const { currentPassword, newPassword} = req.body;
     try {
