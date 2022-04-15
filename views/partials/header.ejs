@@ -15,32 +15,34 @@
 <body>
 
 	<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
-		<a class="navbar-brand" href="/">YelpCamp</a>
-		<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#the-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="the-navbar-collapse">
-			<ul class="navbar-nav">
-				<li class="nav-item <%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %>"><a class="nav-link" href="/campgrounds">Home</a></li>
-				<% if (currentUser && currentUser.isAdmin()) {%>
-					<li class="nav-item <%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %>"><a class="nav-link" href="/users">Users</a></li>
-				<%}%>
-				<li class="nav-item"><a class="nav-link new-ui-button" href="/v2">New UI</a></li>
-			</ul>
-			<ul class="navbar-nav navbar-right ml-auto">
-				<% if (!currentUser) { %>
-					<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-					<li class="nav-item"><a class="nav-link" href="/register">Sign Up</a></li>
-				<% } else { %>
-					<li class="nav-item">
-						<a class="nav-link" href="/users/<%=currentUser.id%>"><%=currentUser.username%>
-							<img src="<%=currentUser.avatar%>" alt="" class="navbar-avatar">
-						</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-				<% } %>
-			</ul>
-		</div>
+        <div class="container">
+            <a class="navbar-brand" href="/">YelpCamp</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#the-navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="the-navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item <%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %>"><a class="nav-link" href="/campgrounds">Home</a></li>
+                    <% if (currentUser && currentUser.isAdmin()) {%>
+                        <li class="nav-item <%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : '' %>"><a class="nav-link" href="/users">Users</a></li>
+                    <%}%>
+                    <li class="nav-item"><a class="nav-link new-ui-button" href="/v2">New UI</a></li>
+                </ul>
+                <ul class="navbar-nav navbar-right ml-auto">
+                    <% if (!currentUser) { %>
+                        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">Sign Up</a></li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/<%=currentUser.id%>"><%=currentUser.username%>
+                                <img src="<%=currentUser.avatar%>" alt="" class="navbar-avatar">
+                            </a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
 	</nav>
 
 	<div class="container">

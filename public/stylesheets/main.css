@@ -1,3 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito:200,300,400,700);
+
+:root {
+    --space1: 16px;
+    --space2: 24px;
+    --space3: 36px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Nunito;
+}
 
 .thumbnail {
 	padding: 0;
@@ -46,4 +57,26 @@
 	background-color:var(--info); 
 	color:var(--dark) !important;
 	margin-left: 1.5rem;
+}
+
+.pictures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    column-gap: var(--space2);
+    row-gap: var(--space2);
+    margin-bottom: var(--space3);
+}
+
+.pictures-grid > div {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.pictures-grid > div > img {
+    inline-size: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
 }
