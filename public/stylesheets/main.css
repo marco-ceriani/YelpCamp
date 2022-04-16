@@ -58,11 +58,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pictures-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    column-gap: var(--space2);
+    display: flex;
+    flex-flow: row wrap;
     row-gap: var(--space2);
-    margin-bottom: var(--space3);
+    padding-bottom: var(--space2);
+    margin-bottom: var(--space1);
 }
 
 .pictures-grid > div {
@@ -70,7 +70,8 @@ h1, h2, h3, h4, h5, h6 {
     flex-flow: column;
     align-items: center;
     justify-content: space-between;
-    
+    padding-inline: var(--space1);
+    width: 100%;
 }
 
 .pictures-grid > div > img {
@@ -78,3 +79,23 @@ h1, h2, h3, h4, h5, h6 {
     aspect-ratio: 3 / 2;
     object-fit: cover;
 }
+
+@media only screen and (min-width: 576px) {
+    .pictures-grid > div {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .pictures-grid > div {
+        width: 33.3%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .pictures-grid > div {
+        width: 25%;
+    }
+}
+
+
